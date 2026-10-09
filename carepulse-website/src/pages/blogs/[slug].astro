@@ -1,0 +1,356 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RichText from '../../components/RichText.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getBlogs, getBlogBySlug, type Blog } from '../../lib/cms';
+
+export async function getStaticPaths() {
+  const blogs = await getBlogs();
+  return blogs.map((blog) => ({
+    params: { slug: blog.slug },
+    props: { blog },
+  }));
+}
+
+interface Props {
+  blog: Blog;
+}
+
+const { slug } = Astro.params;
+let blog = Astro.props.blog;
+
+if (!blog && slug) {
+  const fetched = await getBlogBySlug(slug);
+  if (fetched) {
+    blog = fetched;
+  }
+}
+
+if (!blog) {
+  return Astro.redirect('/blogs');
+}
+
+const allBlogs = await getBlogs();
+const relatedBlogs = allBlogs.filter((b) => b.slug !== blog.slug).slice(0, 3);
+
+const formattedDate = blog.publishedDate
+  ? new Date(blog.publishedDate).toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
+  : 'Recently Published';
+---
+
+<Layout
+  title={`${blog.title} | CarePulse Health Tips`}
+  description={blog.excerpt || 'Medical advice and wellness guidance from CarePulse Health clinic.'}
+>
+  <!-- Breadcrumbs -->
+  <div class="article-breadcrumbs-bar">
+    <div class="container breadcrumbs-inner">
+      <a href="/">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <a href="/blogs">Health Tips</a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-current">{blog.title}</span>
+    </div>
+  </div>
+
+  <article class="article-detail-page">
+    <div class="container article-container">
+      <!-- Article Header -->
+      <header class="article-header">
+        <div class="article-tags-row">
+          <span class="badge badge-default article-badge">{blog.category}</span>
+          <span class="article-date-meta">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            {formattedDate}
+          </span>
+          <span class="article-read-time">5 min read</span>
+        </div>
+
+        <h1 class="article-main-title">{blog.title}</h1>
+
+        {blog.excerpt && (
+          <div class="article-lead-excerpt">
+            <p>{blog.excerpt}</p>
+          </div>
+        )}
+
+        <!-- Doctor Byline Box -->
+        <div class="article-author-card">
+          <div class="author-avatar-circle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="author-details">
+            <span class="author-label">Medically Authored & Reviewed By</span>
+            <h4 class="author-name">{blog.doctorName || 'Dr. Sarah Jenkins, MD'}</h4>
+            <span class="author-credentials">Board Certified • CarePulse Clinical Staff</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Body Content -->
+      <div class="article-body-wrapper">
+        {blog.content ? (
+          <RichText content={blog.content} />
+        ) : (
+          <p class="empty-content-fallback">
+            Please consult your physician or attending medical team for detailed personalized clinical advice.
+          </p>
+        )}
+      </div>
+
+      <!-- Clinical Disclaimer -->
+      <div class="clinical-disclaimer-card">
+        <div class="disclaimer-icon">ℹ️</div>
+        <div class="disclaimer-text">
+          <strong>Medical Review Notice:</strong> This article is authored by board-certified physicians at CarePulse Health for educational and preventive wellness purposes. It is not intended to substitute professional medical diagnosis or personalized treatment regimens. Always consult a qualified physician for symptoms requiring immediate medical evaluation.
+        </div>
+      </div>
+
+      <!-- Article Share & Action Bar -->
+      <div class="article-action-box">
+        <div class="action-info">
+          <h3>Need to Discuss This Condition with a Doctor?</h3>
+          <p>Book a direct in-person consultation or telehealth session with our specialists.</p>
+        </div>
+        <a href={`/contact-us?dept=${encodeURIComponent(blog.category === 'Heart Health' ? 'Cardiology' : blog.category === 'Pediatrics' ? 'Pediatrics' : 'General Medicine')}`} class="btn btn-primary">
+          Schedule Consultation
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Health Articles -->
+  {relatedBlogs.length > 0 && (
+    <section class="related-articles-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Related Readings</span>
+          <h2 class="section-title">More Doctor-Authored Health Tips</h2>
+        </div>
+        <div class="related-grid">
+          {relatedBlogs.map((rel) => (
+            <BlogCard blog={rel} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>
+
+<style>
+  .article-breadcrumbs-bar {
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .breadcrumbs-inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .breadcrumbs-inner a:hover {
+    color: var(--primary);
+  }
+
+  .breadcrumb-separator {
+    color: #cbd5e1;
+  }
+
+  .breadcrumb-current {
+    color: var(--dark);
+    font-weight: 600;
+    max-width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .article-detail-page {
+    padding: 3.5rem 0 5rem;
+  }
+
+  .article-container {
+    max-width: 860px;
+  }
+
+  .article-header {
+    margin-bottom: 3rem;
+  }
+
+  .article-tags-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .article-badge {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .article-date-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .article-read-time {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .article-main-title {
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--dark);
+    letter-spacing: -0.025em;
+    margin-bottom: 1.5rem;
+  }
+
+  .article-lead-excerpt {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    border-left: 3px solid var(--primary);
+    padding-left: 1.25rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
+  }
+
+  .article-author-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .author-avatar-circle {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .author-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--primary);
+    letter-spacing: 0.05em;
+    display: block;
+  }
+
+  .author-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.2;
+  }
+
+  .author-credentials {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .article-body-wrapper {
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 3rem 2.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .empty-content-fallback {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .clinical-disclaimer-card {
+    display: flex;
+    gap: 1rem;
+    background-color: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 3rem;
+  }
+
+  .disclaimer-icon {
+    font-size: 1.25rem;
+  }
+
+  .article-action-box {
+    background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .action-info h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .action-info p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+  }
+
+  /* Related Articles Section */
+  .related-articles-section {
+    background-color: #f8fafc;
+    border-top: 1px solid var(--border);
+    padding: 4.5rem 0 5.5rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .article-body-wrapper {
+      padding: 2rem 1.5rem;
+    }
+  }
+</style>

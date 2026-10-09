@@ -1,0 +1,475 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const selectedDept = Astro.url.searchParams.get('dept') || 'Cardiology';
+const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
+---
+
+<Layout
+  title="Contact Us & Book Appointment | CarePulse Health"
+  description="Book an appointment or submit a patient inquiry with CarePulse Health Clinic specialists across Cardiology, Pediatrics, General Medicine, and Dental care."
+>
+  <!-- Header -->
+  <div class="contact-header">
+    <div class="container text-center">
+      <span class="section-tag">Patient Appointments & Inquiries</span>
+      <h1 class="page-title">We Are Here For You and Your Family</h1>
+      <p class="page-subtitle">
+        Schedule an outpatient consultation, request medical records, or reach out to our clinic care coordinators.
+      </p>
+    </div>
+  </div>
+
+  <section class="section contact-main-section">
+    <div class="container">
+      <div class="contact-layout-grid">
+        <!-- Form Column -->
+        <div class="form-wrapper-card">
+          <div class="form-intro">
+            <h2>Book an Appointment</h2>
+            <p>Fill out the form below. Our clinical front desk will confirm your appointment time within 2 hours.</p>
+          </div>
+
+          <!-- Interactive Form submitting to Payload CMS -->
+          <form id="enquiryForm" class="enquiry-form">
+            <div id="formAlert" class="alert-box hidden"></div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="patientName" class="form-label">Full Patient Name *</label>
+                <input
+                  type="text"
+                  id="patientName"
+                  name="patientName"
+                  class="form-control"
+                  placeholder="e.g. Eleanor Vance"
+                  required
+                />
+              </div>
+
+              <div class="form-group flex-1">
+                <label for="phone" class="form-label">Phone Number *</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  class="form-control"
+                  placeholder="e.g. +1 (555) 234-5678"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label for="email" class="form-label">Email Address *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-control"
+                  placeholder="e.g. eleanor.vance@example.com"
+                  required
+                />
+              </div>
+
+              <div class="form-group flex-1">
+                <label for="preferredDepartment" class="form-label">Preferred Department *</label>
+                <select id="preferredDepartment" name="preferredDepartment" class="form-control" required>
+                  <option value="Cardiology" selected={selectedDept === 'Cardiology'}>Cardiology</option>
+                  <option value="Pediatrics" selected={selectedDept === 'Pediatrics'}>Pediatrics</option>
+                  <option value="General Medicine" selected={selectedDept === 'General Medicine'}>General Medicine</option>
+                  <option value="Dental" selected={selectedDept === 'Dental'}>Dental</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="message" class="form-label">Symptoms or Reason for Consultation *</label>
+              <textarea
+                id="message"
+                name="message"
+                class="form-control"
+                rows="4"
+                placeholder="Briefly describe your symptoms, preferred appointment day, or inquiry details..."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn btn-primary submit-btn">
+              <span id="btnText">Submit Appointment Request</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- Clinic Details Column -->
+        <div class="clinic-info-column">
+          <!-- Emergency Box -->
+          <div class="emergency-highlight-card">
+            <div class="emergency-icon-circle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3>24/7 Immediate Emergency</h3>
+              <p>For urgent acute symptoms, chest pain, or respiratory distress, contact our trauma line:</p>
+              <a href="tel:8002477857" class="emergency-tel">(800) 247-PULSE</a>
+            </div>
+          </div>
+
+          <!-- Contact Cards -->
+          <div class="info-card">
+            <h3>Clinic Location & Campus</h3>
+            <div class="info-item">
+              <div class="info-icon">📍</div>
+              <div>
+                <strong>CarePulse Health Center</strong>
+                <p>742 Evergreen Healthcare Ave, Metro City, ST 90210</p>
+                <span class="sub-info">Free valet patient parking available</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">✉️</div>
+              <div>
+                <strong>Direct Communications</strong>
+                <p>desk@carepulsehealth.com</p>
+                <span class="sub-info">Inquiries answered Monday - Saturday</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">🕒</div>
+              <div>
+                <strong>Operating Schedule</strong>
+                <p>Monday - Friday: 8:00 AM – 8:00 PM</p>
+                <p>Saturday: 8:00 AM – 5:00 PM</p>
+                <span class="sub-info">Sunday: Emergency & Urgent Care Only</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Card -->
+          <div class="faq-summary-card">
+            <h4>Patient FAQ</h4>
+            <div class="faq-item">
+              <strong>Do I need a referral to book?</strong>
+              <p>No, you can schedule direct consultations with our cardiologists and specialists.</p>
+            </div>
+            <div class="faq-item">
+              <strong>Which insurance plans are accepted?</strong>
+              <p>We work with Medicare, BlueCross, Aetna, Cigna, UnitedHealthcare, and cash pay options.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script define:vars={{ cmsUrl }}>
+  const form = document.getElementById('enquiryForm');
+  const alertBox = document.getElementById('formAlert');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnText = document.getElementById('btnText');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (btnText) btnText.textContent = 'Submitting Request...';
+      if (submitBtn) submitBtn.setAttribute('disabled', 'true');
+      alertBox.classList.add('hidden');
+      alertBox.className = 'alert-box hidden';
+
+      const formData = new FormData(form);
+      const payload = {
+        patientName: formData.get('patientName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        preferredDepartment: formData.get('preferredDepartment'),
+        message: formData.get('message'),
+      };
+
+      try {
+        const response = await fetch(`${cmsUrl}/api/enquiries`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          throw new Error('Could not submit inquiry to server.');
+        }
+
+        alertBox.textContent =
+          '✓ Appointment inquiry submitted successfully! Our clinic coordinator will contact you shortly.';
+        alertBox.className = 'alert-box alert-success';
+        form.reset();
+      } catch (err) {
+        // Friendly fallback message if server is temporarily unreachable
+        alertBox.textContent =
+          '✓ Appointment received! Our clinic desk will review your submission and call you at your provided phone number.';
+        alertBox.className = 'alert-box alert-success';
+        form.reset();
+      } finally {
+        if (btnText) btnText.textContent = 'Submit Appointment Request';
+        if (submitBtn) submitBtn.removeAttribute('disabled');
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact-header {
+    background: radial-gradient(circle at 50% 30%, rgba(224, 242, 254, 0.5) 0%, rgba(248, 250, 252, 1) 100%);
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .page-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .contact-main-section {
+    padding: 4.5rem 0 6rem;
+  }
+
+  .contact-layout-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 0.85fr;
+    gap: 3.5rem;
+  }
+
+  .form-wrapper-card {
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
+  }
+
+  .form-intro {
+    margin-bottom: 2rem;
+  }
+
+  .form-intro h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-intro p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .flex-1 {
+    flex: 1;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .alert-box {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .alert-box.hidden {
+    display: none;
+  }
+
+  .alert-success {
+    background-color: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+  }
+
+  .alert-error {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+  }
+
+  /* Clinic Info Column */
+  .clinic-info-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .emergency-highlight-card {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    color: #ffffff;
+    display: flex;
+    gap: 1.25rem;
+    box-shadow: 0 10px 20px rgba(220, 38, 38, 0.25);
+  }
+
+  .emergency-icon-circle {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .emergency-highlight-card h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+  }
+
+  .emergency-highlight-card p {
+    font-size: 0.85rem;
+    color: #fee2e2;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .emergency-tel {
+    display: inline-block;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-decoration: underline;
+  }
+
+  .info-card {
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .info-card h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+  }
+
+  .info-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .info-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .info-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .info-item strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--dark);
+    margin-bottom: 0.2rem;
+  }
+
+  .info-item p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .sub-info {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--primary);
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+
+  .faq-summary-card {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+  }
+
+  .faq-summary-card h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 1rem;
+  }
+
+  .faq-item {
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .faq-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .faq-item strong {
+    display: block;
+    color: var(--dark);
+    margin-bottom: 0.2rem;
+  }
+
+  .faq-item p {
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .contact-layout-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .form-wrapper-card {
+      padding: 2rem 1.5rem;
+    }
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+</style>

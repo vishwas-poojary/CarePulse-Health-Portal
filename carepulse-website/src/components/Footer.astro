@@ -1,0 +1,247 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="container footer-grid">
+      <!-- Col 1: About Clinic -->
+      <div class="footer-col brand-col">
+        <a href="/" class="footer-logo">
+          <div class="footer-logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+          </div>
+          <span class="footer-brand-title">CarePulse Health</span>
+        </a>
+        <p class="footer-bio">
+          CarePulse Health is a multispeciality clinical sanctuary committed to clinical precision, compassionate patient recovery, and evidence-based preventive care.
+        </p>
+        <div class="accreditations">
+          <span class="badge badge-wellness">NABH Accredited</span>
+          <span class="badge badge-default">JCI Standard</span>
+          <span class="badge badge-wellness">24/7 ICU</span>
+        </div>
+      </div>
+
+      <!-- Col 2: Quick Links -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Quick Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/about-us">About Our Clinic</a></li>
+          <li><a href="/blogs">Health Tips & Articles</a></li>
+          <li><a href="/contact-us">Doctor Appointment</a></li>
+          <li><a href="/contact-us">Patient Enquiries</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Specialties -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Medical Specialties</h4>
+        <ul class="footer-links">
+          <li><a href="/contact-us">Cardiovascular Care</a></li>
+          <li><a href="/contact-us">Pediatrics & Neonatal</a></li>
+          <li><a href="/contact-us">General & Internal Medicine</a></li>
+          <li><a href="/contact-us">Comprehensive Dental</a></li>
+          <li><a href="/contact-us">Neuropsychiatry & Wellness</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Contact & Hours -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Contact & Emergency</h4>
+        <div class="contact-card">
+          <div class="contact-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>742 Evergreen Healthcare Ave, Metro City</span>
+          </div>
+          <div class="contact-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            <span>Hotline: (800) 247-PULSE</span>
+          </div>
+          <div class="contact-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span>desk@carepulsehealth.com</span>
+          </div>
+          <div class="timing-badge">
+            Consultations: Mon - Sat (8am - 8pm) | ER 24/7
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container bottom-inner">
+      <p class="copyright">
+        © {currentYear} CarePulse Health Clinic. All rights reserved. Managed with Payload CMS 3.x.
+      </p>
+      <div class="bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Care</a>
+        <a href="#">Patient Rights</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--dark);
+    color: #cbd5e1;
+    margin-top: auto;
+  }
+
+  .footer-top {
+    padding: 4.5rem 0 3.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.3fr;
+    gap: 3rem;
+  }
+
+  .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    color: #ffffff;
+  }
+
+  .footer-logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+  }
+
+  .footer-brand-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ffffff;
+  }
+
+  .footer-bio {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+  }
+
+  .accreditations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .footer-heading {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .footer-links a {
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  .footer-links a:hover {
+    color: #38bdf8;
+    padding-left: 4px;
+  }
+
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: #94a3b8;
+  }
+
+  .timing-badge {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    color: #38bdf8;
+    font-weight: 500;
+  }
+
+  .footer-bottom {
+    padding: 1.75rem 0;
+    font-size: 0.85rem;
+    color: #64748b;
+  }
+
+  .bottom-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .bottom-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .bottom-links a {
+    color: #64748b;
+  }
+
+  .bottom-links a:hover {
+    color: #cbd5e1;
+  }
+
+  @media (max-width: 992px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+    .bottom-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

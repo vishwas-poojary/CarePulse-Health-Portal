@@ -1,0 +1,190 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getBlogs } from '../../lib/cms';
+
+const currentCategory = Astro.url.searchParams.get('category') || 'All';
+const blogs = await getBlogs(currentCategory);
+
+const categories = [
+  'All',
+  'Heart Health',
+  'General Wellness',
+  'Pediatrics',
+  'Mental Health',
+];
+---
+
+<Layout
+  title="Health Tips & Medical Advice | CarePulse Health"
+  description="Explore evidence-based wellness tips, cardiology lifestyle changes, pediatric milestones, and mental health advice authored by CarePulse doctors."
+>
+  <div class="blogs-page-header">
+    <div class="container text-center">
+      <span class="section-tag">Patient Education Portal</span>
+      <h1 class="page-title">Health Tips & Doctor Insights</h1>
+      <p class="page-subtitle">
+        Empowering patients and families with certified medical knowledge, preventive strategies, and clinical wellness guidance.
+      </p>
+
+      <!-- Category Tabs -->
+      <div class="category-tabs">
+        {categories.map((cat) => {
+          const isSelected = currentCategory === cat;
+          const href = cat === 'All' ? '/blogs' : `/blogs?category=${encodeURIComponent(cat)}`;
+          return (
+            <a href={href} class:list={['category-pill', { active: isSelected }]}>
+              {cat}
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+
+  <section class="blogs-listing-section">
+    <div class="container">
+      {blogs.length > 0 ? (
+        <div class="blogs-grid">
+          {blogs.map((blog) => (
+            <BlogCard blog={blog} />
+          ))}
+        </div>
+      ) : (
+        <div class="no-blogs-state text-center">
+          <div class="empty-icon">📋</div>
+          <h3>No Articles in This Category Yet</h3>
+          <p>Please check back soon or browse our other wellness specialties.</p>
+          <a href="/blogs" class="btn btn-primary" style="margin-top: 1rem;">
+            View All Articles
+          </a>
+        </div>
+      )}
+
+      <!-- Consultation Callout -->
+      <div class="article-callout-box">
+        <div class="callout-text">
+          <h3>Need Personal Medical Guidance?</h3>
+          <p>Our attending physicians are available for both in-clinic and telehealth consultations.</p>
+        </div>
+        <a href="/contact-us" class="btn btn-primary">
+          Book Doctor Appointment
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .blogs-page-header {
+    background: radial-gradient(circle at 50% 30%, rgba(224, 242, 254, 0.5) 0%, rgba(248, 250, 252, 1) 100%);
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .page-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+  }
+
+  .category-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  .category-pill {
+    padding: 0.55rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    transition: var(--transition);
+  }
+
+  .category-pill:hover {
+    color: var(--primary);
+    border-color: var(--primary-subtle);
+    background-color: var(--primary-light);
+  }
+
+  .category-pill.active {
+    color: #ffffff;
+    background-color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  }
+
+  .blogs-listing-section {
+    padding: 4.5rem 0 6rem;
+  }
+
+  .blogs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .no-blogs-state {
+    padding: 4rem 1rem;
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 4rem;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .no-blogs-state h3 {
+    font-size: 1.35rem;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .no-blogs-state p {
+    color: var(--text-muted);
+  }
+
+  .article-callout-box {
+    background: linear-gradient(135deg, var(--primary-light) 0%, #ffffff 100%);
+    border: 1.5px solid var(--primary-subtle);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    box-shadow: var(--shadow-md);
+  }
+
+  .callout-text h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.25rem;
+  }
+
+  .callout-text p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+</style>

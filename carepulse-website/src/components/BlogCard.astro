@@ -1,0 +1,244 @@
+---
+import type { Blog } from '../lib/cms';
+
+interface Props {
+  blog: Blog;
+}
+
+const { blog } = Astro.props;
+
+function getBadgeClass(cat: string) {
+  switch (cat) {
+    case 'Heart Health':
+      return 'badge-heart';
+    case 'General Wellness':
+      return 'badge-wellness';
+    case 'Pediatrics':
+      return 'badge-pediatrics';
+    case 'Mental Health':
+      return 'badge-mental';
+    default:
+      return 'badge-default';
+  }
+}
+
+const formattedDate = blog.publishedDate
+  ? new Date(blog.publishedDate).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    })
+  : 'Recent';
+
+// Category fallback image gradients/placeholders
+const categoryIcons: Record<string, string> = {
+  'Heart Health': '❤️',
+  'General Wellness': '🌿',
+  'Pediatrics': '👶',
+  'Mental Health': '🧠',
+};
+const icon = categoryIcons[blog.category] || '🩺';
+---
+
+<article class="blog-card">
+  <div class="card-media">
+    <div class="media-placeholder">
+      <span class="media-icon">{icon}</span>
+      <span class="media-category-label">{blog.category}</span>
+    </div>
+    <span class:list={['card-badge', 'badge', getBadgeClass(blog.category)]}>
+      {blog.category}
+    </span>
+  </div>
+
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="meta-date">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        {formattedDate}
+      </span>
+      <span class="meta-dot">•</span>
+      <span class="meta-read">4 min read</span>
+    </div>
+
+    <h3 class="card-title">
+      <a href={`/blogs/${blog.slug}`}>
+        {blog.title}
+      </a>
+    </h3>
+
+    {blog.excerpt && <p class="card-excerpt">{blog.excerpt}</p>}
+
+    <div class="card-footer">
+      <div class="doctor-byline">
+        <div class="doctor-avatar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <span class="doctor-name">{blog.doctorName || 'CarePulse Specialist'}</span>
+      </div>
+
+      <a href={`/blogs/${blog.slug}`} class="read-more-link" aria-label={`Read article: ${blog.title}`}>
+        <span>Read</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .blog-card {
+    background-color: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+    height: 100%;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: #cbd5e1;
+  }
+
+  .card-media {
+    position: relative;
+    height: 200px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .media-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .media-icon {
+    font-size: 2.75rem;
+  }
+
+  .media-category-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .card-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .meta-date {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .card-title a {
+    color: inherit;
+  }
+
+  .card-title a:hover {
+    color: var(--primary);
+  }
+
+  .card-excerpt {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .doctor-byline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .doctor-avatar {
+    width: 28px;
+    height: 28px;
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .doctor-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  .read-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .read-more-link:hover {
+    color: var(--primary-hover);
+    gap: 0.55rem;
+  }
+</style>

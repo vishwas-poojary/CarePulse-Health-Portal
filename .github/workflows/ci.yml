@@ -1,0 +1,35 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  lint-and-build:
+    name: Lint, Spell Check, and Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Monorepo Root Dependencies
+        run: npm ci || npm install
+
+      - name: Run Spell Checker (cspell)
+        run: npm run lint:spell
+
+      - name: Install Astro Website Dependencies
+        working-directory: ./carepulse-website
+        run: npm ci || npm install
+
+      - name: Build Astro Website
+        working-directory: ./carepulse-website
+        run: npm run build

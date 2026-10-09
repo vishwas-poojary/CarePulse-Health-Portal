@@ -1,0 +1,666 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import DoctorCard from '../components/DoctorCard.astro';
+import { getBlogs, getAboutUs } from '../lib/cms';
+
+const [blogs, aboutUs] = await Promise.all([
+  getBlogs(),
+  getAboutUs(),
+]);
+
+const featuredBlogs = blogs.slice(0, 3);
+
+const specialties = [
+  {
+    name: 'Cardiology & Heart Care',
+    desc: 'Advanced ECG, echocardiography, preventive vascular evaluations, and cardiac rehabilitation.',
+    icon: '❤️',
+    department: 'Cardiology',
+  },
+  {
+    name: 'Pediatrics & Child Health',
+    desc: 'From newborn neonatal care to adolescent wellness, milestone tracking, and routine vaccinations.',
+    icon: '👶',
+    department: 'Pediatrics',
+  },
+  {
+    name: 'General & Internal Medicine',
+    desc: 'Comprehensive adult diagnostics, chronic disease management, and full-body preventive health checkups.',
+    icon: '🩺',
+    department: 'General Medicine',
+  },
+  {
+    name: 'Comprehensive Dental Clinic',
+    desc: 'Pediatric dentistry, cosmetic restorations, orthodontics, and restorative oral surgery.',
+    icon: '🦷',
+    department: 'Dental',
+  },
+  {
+    name: 'Orthopedics & Joint Care',
+    desc: 'Joint replacement, arthroscopic surgery, sports medicine, and specialized rehabilitation therapy.',
+    icon: '🦴',
+    department: 'General Medicine',
+  },
+  {
+    name: 'Neuropsychiatry & Wellness',
+    desc: 'Cognitive behavioral support, neurological evaluations, and burnout mitigation therapies.',
+    icon: '🧠',
+    department: 'General Medicine',
+  },
+];
+
+const doctors = [
+  {
+    name: 'Dr. Sarah Jenkins, MD',
+    title: 'Senior Consultant Cardiologist',
+    department: 'Cardiology',
+    experience: '16+ Years',
+    focus: 'Preventive Cardiology & Echo Diagnostics',
+  },
+  {
+    name: 'Dr. Marcus Vance, FAAP',
+    title: 'Chief of Pediatrics',
+    department: 'Pediatrics',
+    experience: '14+ Years',
+    focus: 'Neonatal Care & Pediatric Pulmonology',
+  },
+  {
+    name: 'Dr. Aris Thorne, MD',
+    title: 'Lead Internist & Preventive Specialist',
+    department: 'General Medicine',
+    experience: '12+ Years',
+    focus: 'Metabolic Health & Longevity Medicine',
+  },
+];
+---
+
+<Layout title="CarePulse Health | Premier Multispeciality Clinic & Doctor Portal">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <div class="section-tag">
+          <span class="pulse-indicator"></span>
+          Premier Multispeciality Clinic
+        </div>
+        <h1 class="hero-title">
+          Compassionate Healthcare with <span class="highlight-text">Clinical Precision.</span>
+        </h1>
+        <p class="hero-description">
+          Welcome to {aboutUs.clinicName}. {aboutUs.tagline}. Our multidisciplinary team of board-certified specialists delivers evidence-based diagnostics, advanced outpatient surgeries, and holistic wellness programs.
+        </p>
+
+        <div class="hero-actions">
+          <a href="/contact-us" class="btn btn-primary hero-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Book Patient Consultation
+          </a>
+          <a href="/blogs" class="btn btn-outline hero-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            Read Health Tips
+          </a>
+        </div>
+
+        <!-- Dynamic Key Stats from CMS -->
+        <div class="hero-stats">
+          <div class="stat-box">
+            <span class="stat-number">{aboutUs.keyStats.yearsOfExperience}+</span>
+            <span class="stat-label">Years Clinical Excellence</span>
+          </div>
+          <div class="stat-separator"></div>
+          <div class="stat-box">
+            <span class="stat-number">{aboutUs.keyStats.specialistDoctors}+</span>
+            <span class="stat-label">Board-Certified Specialists</span>
+          </div>
+          <div class="stat-separator"></div>
+          <div class="stat-box">
+            <span class="stat-number">{aboutUs.keyStats.happyPatients}</span>
+            <span class="stat-label">Satisfied Patients</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="visual-card">
+          <div class="doctor-badge-float">
+            <div class="badge-icon">⭐</div>
+            <div class="badge-text">
+              <strong>4.9 / 5.0 Rating</strong>
+              <span>Over 8,000 Patient Reviews</span>
+            </div>
+          </div>
+
+          <div class="visual-image-box">
+            <div class="heartbeat-art">
+              <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>
+              <div class="clinic-stamp">
+                <h4>{aboutUs.clinicName}</h4>
+                <p>NABH & JCI Standard Patient Safety</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="emergency-badge-float">
+            <div class="emergency-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+            </div>
+            <div>
+              <strong>Emergency Desk: (800) 247-PULSE</strong>
+              <span>Immediate Ambulance Dispatch</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specialties Section -->
+  <section class="section specialties-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">Clinical Departments</span>
+        <h2 class="section-title">Specialized Care for Every Generation</h2>
+        <p class="section-description centered">
+          Our clinic unites multiple medical disciplines under one facility to deliver prompt diagnoses, cross-functional consultations, and tailored therapy plans.
+        </p>
+      </div>
+
+      <div class="specialties-grid">
+        {specialties.map((spec) => (
+          <div class="specialty-card">
+            <div class="specialty-icon-box">{spec.icon}</div>
+            <h3 class="specialty-name">{spec.name}</h3>
+            <p class="specialty-desc">{spec.desc}</p>
+            <a href={`/contact-us?dept=${encodeURIComponent(spec.department)}`} class="specialty-link">
+              <span>Book Department</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Health Blogs / Articles Section -->
+  <section class="section blogs-section">
+    <div class="container">
+      <div class="section-header-row">
+        <div>
+          <span class="section-tag">Doctor's Journal</span>
+          <h2 class="section-title">Latest Health Advice & Clinical Tips</h2>
+          <p class="section-description">
+            Evidence-based medical articles and wellness strategies written directly by our attending physicians.
+          </p>
+        </div>
+        <a href="/blogs" class="btn btn-outline view-all-btn">
+          View All Health Tips
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+
+      <div class="blogs-grid">
+        {featuredBlogs.map((blog) => (
+          <BlogCard blog={blog} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Doctors Highlight Section -->
+  <section class="section doctors-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">Medical Leadership</span>
+        <h2 class="section-title">Meet Our Distinguished Specialists</h2>
+        <p class="section-description centered">
+          Our physicians bring decades of fellowship experience from top medical institutions worldwide.
+        </p>
+      </div>
+
+      <div class="doctors-grid">
+        {doctors.map((doctor) => (
+          <DoctorCard {...doctor} />
+        ))}
+      </div>
+
+      <div class="doctor-cta-footer text-center">
+        <p>Looking for a specific sub-specialist or pediatric surgeon?</p>
+        <a href="/about-us" class="learn-more-link">
+          Explore All {aboutUs.keyStats.specialistDoctors}+ Doctors on Our Clinical Staff →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Appointment CTA Banner -->
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-banner">
+        <div class="cta-content">
+          <span class="cta-pill">Immediate Healthcare Access</span>
+          <h2 class="cta-title">Your Health Journey Deserves World-Class Medical Attention.</h2>
+          <p class="cta-desc">
+            Schedule an in-person consultation or second opinion today. Our patient support coordinators are available 24/7 to assist with scheduling, records transfer, and insurance verification.
+          </p>
+          <div class="cta-buttons">
+            <a href="/contact-us" class="btn btn-white">
+              Schedule Appointment Now
+            </a>
+            <a href="tel:8002477857" class="btn btn-outline-white">
+              Call Hotline: (800) 247-PULSE
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-section {
+    padding: 4.5rem 0 5rem;
+    background: radial-gradient(circle at 10% 20%, rgba(224, 242, 254, 0.6) 0%, rgba(248, 250, 252, 1) 90%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 4.5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--dark);
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+  }
+
+  .highlight-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-description {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .hero-btn {
+    padding: 0.9rem 1.75rem;
+    font-size: 1rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .stat-box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-number {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.1;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .stat-separator {
+    width: 1px;
+    height: 40px;
+    background-color: var(--border);
+  }
+
+  /* Hero Visual */
+  .hero-visual {
+    position: relative;
+  }
+
+  .visual-card {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 3rem 2rem;
+    box-shadow: var(--shadow-xl);
+    text-align: center;
+  }
+
+  .visual-image-box {
+    padding: 2rem 0;
+  }
+
+  .heartbeat-art {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .clinic-stamp h4 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--dark);
+  }
+
+  .clinic-stamp p {
+    font-size: 0.85rem;
+    color: var(--secondary);
+    font-weight: 600;
+  }
+
+  .doctor-badge-float {
+    position: absolute;
+    top: -1.5rem;
+    left: -1rem;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: var(--shadow-lg);
+    text-align: left;
+  }
+
+  .badge-icon {
+    font-size: 1.5rem;
+  }
+
+  .badge-text strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--dark);
+  }
+
+  .badge-text span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .emergency-badge-float {
+    position: absolute;
+    bottom: -1.5rem;
+    right: -1rem;
+    background: var(--dark);
+    color: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: var(--shadow-xl);
+    text-align: left;
+  }
+
+  .emergency-icon {
+    color: #38bdf8;
+  }
+
+  .emergency-badge-float strong {
+    display: block;
+    font-size: 0.85rem;
+  }
+
+  .emergency-badge-float span {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
+  /* Sections */
+  .section {
+    padding: 5rem 0;
+  }
+
+  .section-header.text-center {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-description.centered {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .specialties-section {
+    background-color: #ffffff;
+  }
+
+  .specialties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .specialty-card {
+    background-color: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .specialty-card:hover {
+    transform: translateY(-4px);
+    background-color: #ffffff;
+    box-shadow: var(--shadow-lg);
+    border-color: #bae6fd;
+  }
+
+  .specialty-icon-box {
+    font-size: 2.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .specialty-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .specialty-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex: 1;
+  }
+
+  .specialty-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .specialty-link:hover {
+    color: var(--primary-hover);
+    gap: 0.55rem;
+  }
+
+  /* Blogs Section */
+  .blogs-section {
+    background-color: var(--bg-page);
+  }
+
+  .section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .blogs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  /* Doctors Section */
+  .doctors-section {
+    background-color: #ffffff;
+  }
+
+  .doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .doctor-cta-footer p {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+  }
+
+  .learn-more-link {
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .learn-more-link:hover {
+    text-decoration: underline;
+  }
+
+  /* CTA Banner */
+  .cta-section {
+    padding-bottom: 5rem;
+  }
+
+  .cta-banner {
+    background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+    border-radius: var(--radius-xl);
+    padding: 4.5rem 3rem;
+    color: #ffffff;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-content {
+    max-width: 750px;
+  }
+
+  .cta-pill {
+    display: inline-block;
+    padding: 0.3rem 0.85rem;
+    background: rgba(2, 132, 199, 0.25);
+    border: 1px solid rgba(2, 132, 199, 0.5);
+    color: #38bdf8;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.25rem;
+  }
+
+  .cta-title {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+  }
+
+  .cta-desc {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .btn-outline-white {
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+  }
+
+  .btn-outline-white:hover {
+    border-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  @media (max-width: 992px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .hero-visual {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero-stats {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.25rem;
+    }
+    .stat-separator {
+      display: none;
+    }
+    .cta-banner {
+      padding: 3rem 1.5rem;
+    }
+  }
+</style>

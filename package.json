@@ -1,0 +1,23 @@
+{
+  "name": "carepulse-health-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CarePulse Health Portal - Payload CMS Backend and Astro Frontend",
+  "workspaces": [
+    "carepulse-cms-admin",
+    "carepulse-website"
+  ],
+  "scripts": {
+    "prepare": "husky",
+    "lint:spell": "cspell \"**/*.{ts,tsx,js,jsx,astro,md,json}\" --no-progress",
+    "lint": "npm run lint:spell",
+    "build:website": "npm --prefix carepulse-website run build",
+    "dev:cms": "npm --prefix carepulse-cms-admin run dev",
+    "dev:website": "npm --prefix carepulse-website run dev",
+    "build": "npm run build:website"
+  },
+  "devDependencies": {
+    "cspell": "^8.19.4",
+    "husky": "^9.1.7"
+  }
+}

@@ -1,0 +1,108 @@
+---
+interface Props {
+  content: any;
+}
+
+const { content } = Astro.props;
+
+function renderNode(node: any): string {
+  if (!node) return '';
+
+  if (typeof node === 'string') {
+    return `<p>${node}</p>`;
+  }
+
+  if (node.text !== undefined) {
+    let text = node.text;
+    // Lexical format flags: 1 = bold, 2 = italic, 8 = underline, 16 = strikethrough, 32 = code
+    if (node.format & 1) text = `<strong>${text}</strong>`;
+    if (node.format & 2) text = `<em>${text}</em>`;
+    if (node.format & 8) text = `<u>${text}</u>`;
+    if (node.format & 32) text = `<code>${text}</code>`;
+    return text;
+  }
+
+  const childrenHtml = Array.isArray(node.children)
+    ? node.children.map(renderNode).join('')
+    : '';
+
+  switch (node.type) {
+    case 'root':
+      return childrenHtml;
+    case 'paragraph':
+      return `<p>${childrenHtml || '&nbsp;'}</p>`;
+    case 'heading': {
+      const tag = node.tag || 'h3';
+      return `<${tag}>${childrenHtml}</${tag}>`;
+    }
+    case 'list': {
+      const tag = node.listType === 'number' ? 'ol' : 'ul';
+      return `<${tag}>${childrenHtml}</${tag}>`;
+    }
+    case 'listitem':
+      return `<li>${childrenHtml}</li>`;
+    case 'quote':
+      return `<blockquote>${childrenHtml}</blockquote>`;
+    case 'link':
+      return `<a href="${node.fields?.url || '#'}" target="${node.fields?.newTab ? '_blank' : '_self'}" rel="noopener noreferrer">${childrenHtml}</a>`;
+    default:
+      return childrenHtml;
+  }
+}
+
+const html = content?.root ? renderNode(content.root) : (typeof content === 'string' ? `<p>${content}</p>` : '');
+---
+
+<div class="rich-text-content" set:html={html} />
+
+<style is:global>
+  .rich-text-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-main);
+  }
+
+  .rich-text-content p {
+    margin-bottom: 1.5rem;
+  }
+
+  .rich-text-content h2,
+  .rich-text-content h3,
+  .rich-text-content h4 {
+    color: var(--dark);
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .rich-text-content ul,
+  .rich-text-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .rich-text-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .rich-text-content blockquote {
+    border-left: 4px solid var(--primary);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background-color: var(--primary-light);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-style: italic;
+    color: var(--dark);
+  }
+
+  .rich-text-content strong {
+    color: var(--dark);
+    font-weight: 700;
+  }
+
+  .rich-text-content a {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+</style>
