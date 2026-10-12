@@ -228,6 +228,12 @@ img {
   border: 1px solid #f3e8ff;
 }
 
+.badge-dental {
+  background-color: #ecfeff;
+  color: #0891b2;
+  border: 1px solid #cffafe;
+}
+
 .badge-default {
   background-color: var(--primary-light);
   color: var(--primary);

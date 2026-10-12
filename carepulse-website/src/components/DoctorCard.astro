@@ -6,22 +6,50 @@ interface Props {
   experience: string;
   focus: string;
   image?: string;
+  availableToday?: boolean;
+  rating?: string;
 }
 
-const { name, title, department, experience, focus } = Astro.props;
+const {
+  name,
+  title,
+  department,
+  experience,
+  focus,
+  image = 'https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=800',
+  availableToday = true,
+  rating = '4.9',
+} = Astro.props;
 ---
 
 <div class="doctor-card">
   <div class="doctor-img-wrap">
-    <div class="doctor-placeholder-art">
-      <div class="doctor-symbol">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-      </div>
+    <img
+      src={image}
+      alt={name}
+      class="doctor-img"
+      loading="lazy"
+      width="400"
+      height="300"
+    />
+    <div class="img-overlay"></div>
+    
+    <div class="top-badges">
+      <span class="dept-badge">{department}</span>
+      {availableToday && (
+        <span class="status-badge">
+          <span class="status-pulse"></span>
+          Available
+        </span>
+      )}
     </div>
-    <span class="dept-badge">{department}</span>
+
+    <div class="rating-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="1.5">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+      </svg>
+      <span>{rating}</span>
+    </div>
   </div>
 
   <div class="doctor-info">
@@ -40,8 +68,15 @@ const { name, title, department, experience, focus } = Astro.props;
     </div>
 
     <div class="doctor-actions">
-      <a href={`/contact-us?dept=${encodeURIComponent(department)}`} class="btn btn-outline book-doc-btn">
-        Consult Specialist
+      <a
+        href={`/contact-us?dept=${encodeURIComponent(department)}&doctor=${encodeURIComponent(name)}`}
+        class="btn btn-primary book-doc-btn"
+      >
+        <span>Book Consultation</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
       </a>
     </div>
   </div>
@@ -56,46 +91,110 @@ const { name, title, department, experience, focus } = Astro.props;
     transition: var(--transition);
     display: flex;
     flex-direction: column;
+    box-shadow: var(--shadow-sm);
   }
 
   .doctor-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: #cbd5e1;
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: #bae6fd;
   }
 
   .doctor-img-wrap {
     position: relative;
-    height: 220px;
-    background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 240px;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f1f5f9;
   }
 
-  .doctor-symbol {
-    width: 80px;
-    height: 80px;
-    background: #ffffff;
-    color: var(--primary);
-    border-radius: 50%;
+  .doctor-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .doctor-card:hover .doctor-img {
+    transform: scale(1.05);
+  }
+
+  .img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0) 50%);
+    pointer-events: none;
+  }
+
+  .top-badges {
+    position: absolute;
+    top: 0.85rem;
+    left: 0.85rem;
+    right: 0.85rem;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow-md);
+    gap: 0.5rem;
+    z-index: 2;
   }
 
   .dept-badge {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(15, 23, 42, 0.82);
     color: #ffffff;
     font-size: 0.75rem;
     font-weight: 600;
-    padding: 0.25rem 0.75rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(16, 185, 129, 0.9);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
     border-radius: var(--radius-full);
     backdrop-filter: blur(4px);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .status-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.9); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+    100% { transform: scale(0.9); opacity: 1; }
+  }
+
+  .rating-badge {
+    position: absolute;
+    bottom: 0.85rem;
+    left: 0.85rem;
+    background: #ffffff;
+    color: var(--dark);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    box-shadow: var(--shadow-sm);
+    z-index: 2;
   }
 
   .doctor-info {
@@ -110,6 +209,7 @@ const { name, title, department, experience, focus } = Astro.props;
     font-weight: 700;
     color: var(--dark);
     margin-bottom: 0.25rem;
+    line-height: 1.3;
   }
 
   .doctor-role {
@@ -122,7 +222,7 @@ const { name, title, department, experience, focus } = Astro.props;
   .doctor-meta {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
     font-size: 0.85rem;
     margin-bottom: 1.5rem;
     flex: 1;
@@ -133,11 +233,12 @@ const { name, title, department, experience, focus } = Astro.props;
     justify-content: space-between;
     gap: 0.5rem;
     border-bottom: 1px dashed var(--border-light);
-    padding-bottom: 0.35rem;
+    padding-bottom: 0.4rem;
   }
 
   .meta-label {
     color: var(--text-muted);
+    font-size: 0.82rem;
   }
 
   .meta-value {
@@ -148,7 +249,12 @@ const { name, title, department, experience, focus } = Astro.props;
 
   .book-doc-btn {
     width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     font-size: 0.875rem;
-    padding: 0.6rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
   }
 </style>

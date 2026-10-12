@@ -1,34 +1,36 @@
 ---
-const pathname = Astro.url.pathname;
+interface Props {
+  pathname?: string;
+}
+
+const { pathname = '/' } = Astro.props;
+
 const navLinks = [
   { href: '/', label: 'Home' },
+  { href: '/about-us', label: 'About Clinic' },
   { href: '/blogs', label: 'Health Tips' },
-  { href: '/about-us', label: 'About Us' },
   { href: '/contact-us', label: 'Contact & Appointments' },
 ];
 ---
 
 <header class="site-header">
+  <!-- Top Emergency & Info Banner -->
   <div class="top-announcement">
     <div class="container announcement-inner">
       <div class="announcement-left">
-        <span class="pulse-indicator"></span>
-        <span>24/7 Emergency & Acute Trauma Care Available</span>
+        <span class="live-dot"></span>
+        <span class="emergency-badge">Emergency 24/7:</span>
+        <a href="tel:8002477857" class="phone-link">(800) 247-PULSE</a>
+        <span class="divider">•</span>
+        <span class="timing-text">Walk-ins Welcome Daily 8AM–8PM</span>
       </div>
       <div class="announcement-right">
-        <a href="tel:8002477857" class="hotline-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-          </svg>
-          Emergency Desk: <strong>(800) 247-PULSE</strong>
-        </a>
-        <span class="divider">|</span>
         <span class="location-text">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
             <circle cx="12" cy="10" r="3"></circle>
           </svg>
-          Metro Central Campus
+          Metro Central Medical Campus
         </span>
       </div>
     </div>
@@ -36,16 +38,29 @@ const navLinks = [
 
   <nav class="main-navbar">
     <div class="container navbar-inner">
-      <!-- Logo -->
+      <!-- Lucide HeartPulse Logo -->
       <a href="/" class="brand-logo" aria-label="CarePulse Health Home">
-        <div class="logo-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+        <div class="logo-icon-box">
+          <!-- Official Lucide HeartPulse SVG from lucide.dev -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide-heart-pulse"
+          >
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>
           </svg>
         </div>
         <div class="brand-text">
           <span class="brand-title">CarePulse</span>
-          <span class="brand-subtitle">Health Portal</span>
+          <span class="brand-tag">CLINIC</span>
         </div>
       </a>
 
@@ -63,24 +78,28 @@ const navLinks = [
         })}
       </ul>
 
-      <!-- CTA -->
+      <!-- CTA & Mobile Toggle -->
       <div class="navbar-actions">
         <a href="/contact-us" class="btn btn-primary nav-cta">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
             <line x1="8" y1="2" x2="8" y2="6"></line>
             <line x1="3" y1="10" x2="21" y2="10"></line>
           </svg>
-          Book Appointment
+          Book Consultation
         </a>
 
         <!-- Mobile Toggle Button -->
-        <button id="mobileMenuBtn" class="mobile-toggle-btn" aria-label="Toggle navigation menu">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button id="mobileMenuBtn" class="mobile-toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <svg id="hamburgerIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <svg id="closeIcon" class="hidden-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
       </div>
@@ -89,22 +108,25 @@ const navLinks = [
 
   <!-- Mobile Drawer -->
   <div id="mobileDrawer" class="mobile-drawer">
-    <div class="mobile-drawer-content">
+    <div class="container mobile-drawer-content">
       <ul class="mobile-nav-list">
-        {navLinks.map((link) => (
-          <li>
-            <a href={link.href} class="mobile-nav-link">
-              {link.label}
-            </a>
-          </li>
-        ))}
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+          return (
+            <li>
+              <a href={link.href} class:list={['mobile-nav-link', { active: isActive }]}>
+                {link.label}
+              </a>
+            </li>
+          );
+        })}
       </ul>
       <div class="mobile-drawer-footer">
         <a href="/contact-us" class="btn btn-primary mobile-btn">
           Book Appointment Now
         </a>
         <div class="mobile-hotline">
-          Emergency Call: <strong>(800) 247-PULSE</strong>
+          Emergency Desk: <a href="tel:8002477857"><strong>(800) 247-PULSE</strong></a>
         </div>
       </div>
     </div>
@@ -114,10 +136,35 @@ const navLinks = [
 <script>
   const toggleBtn = document.getElementById('mobileMenuBtn');
   const drawer = document.getElementById('mobileDrawer');
+  const hamburger = document.getElementById('hamburgerIcon');
+  const closeIcon = document.getElementById('closeIcon');
 
   if (toggleBtn && drawer) {
     toggleBtn.addEventListener('click', () => {
-      drawer.classList.toggle('open');
+      const isOpen = drawer.classList.toggle('open');
+      toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (hamburger && closeIcon) {
+        if (isOpen) {
+          hamburger.classList.add('hidden-icon');
+          closeIcon.classList.remove('hidden-icon');
+        } else {
+          hamburger.classList.remove('hidden-icon');
+          closeIcon.classList.add('hidden-icon');
+        }
+      }
+    });
+
+    // Close on link click
+    const mobileLinks = drawer.querySelectorAll('a');
+    mobileLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        drawer.classList.remove('open');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        if (hamburger && closeIcon) {
+          hamburger.classList.remove('hidden-icon');
+          closeIcon.classList.add('hidden-icon');
+        }
+      });
     });
   }
 </script>
@@ -127,17 +174,18 @@ const navLinks = [
     position: sticky;
     top: 0;
     z-index: 50;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
   }
 
   .top-announcement {
-    background-color: var(--dark);
+    background-color: #0f172a;
     color: #cbd5e1;
     font-size: 0.8rem;
-    padding: 0.45rem 0;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .announcement-inner {
@@ -155,22 +203,50 @@ const navLinks = [
     font-weight: 500;
   }
 
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #ef4444;
+    animation: livePulse 1.8s infinite;
+  }
+
+  @keyframes livePulse {
+    0% { transform: scale(0.9); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+    100% { transform: scale(0.9); opacity: 1; }
+  }
+
+  .emergency-badge {
+    color: #f87171;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .phone-link {
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .phone-link:hover {
+    color: #38bdf8;
+  }
+
+  .divider {
+    color: #475569;
+  }
+
+  .timing-text {
+    color: #94a3b8;
+  }
+
   .announcement-right {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-  }
-
-  .hotline-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: #38bdf8;
-    text-decoration: none;
-  }
-
-  .hotline-link:hover {
-    color: #7dd3fc;
+    color: #94a3b8;
+    font-size: 0.78rem;
   }
 
   .location-text {
@@ -179,21 +255,18 @@ const navLinks = [
     gap: 0.35rem;
   }
 
-  .divider {
-    color: #475569;
-  }
-
   .main-navbar {
     border-bottom: 1px solid var(--border);
   }
 
   .navbar-inner {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    height: 76px;
+    align-items: center;
+    height: 72px;
   }
 
+  /* Lucide Brand Logo */
   .brand-logo {
     display: flex;
     align-items: center;
@@ -201,50 +274,63 @@ const navLinks = [
     text-decoration: none;
   }
 
-  .logo-icon {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  .logo-icon-box {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
     color: #ffffff;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-md);
-    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.35);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .brand-logo:hover .logo-icon-box {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+  }
+
+  .lucide-heart-pulse {
+    stroke: #ffffff;
   }
 
   .brand-text {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
   }
 
   .brand-title {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     font-weight: 800;
     color: var(--dark);
     letter-spacing: -0.02em;
-    line-height: 1.1;
   }
 
-  .brand-subtitle {
-    font-size: 0.75rem;
-    font-weight: 600;
+  .brand-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    background: var(--primary-light);
     color: var(--primary);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.08em;
   }
 
+  /* Desktop Links */
   .nav-menu {
     display: flex;
     align-items: center;
     list-style: none;
-    gap: 0.5rem;
+    gap: 0.35rem;
   }
 
   .nav-link {
     display: inline-block;
-    padding: 0.5rem 1rem;
-    font-size: 0.95rem;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--text-muted);
     border-radius: var(--radius-sm);
@@ -259,26 +345,53 @@ const navLinks = [
   .nav-link.active {
     color: var(--primary);
     background-color: var(--primary-light);
+    font-weight: 700;
   }
 
   .navbar-actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
+  }
+
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.88rem;
+    padding: 0.6rem 1.15rem;
+    border-radius: var(--radius-md);
   }
 
   .mobile-toggle-btn {
     display: none;
-    padding: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
     border-radius: var(--radius-sm);
     color: var(--dark);
+    background-color: #f8fafc;
+    border: 1px solid var(--border);
   }
 
+  .hidden-icon {
+    display: none;
+  }
+
+  /* Mobile Drawer */
   .mobile-drawer {
     display: none;
     border-top: 1px solid var(--border);
     background-color: #ffffff;
-    padding: 1.5rem;
+    padding: 1.25rem 0 1.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07);
+    animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .mobile-drawer.open {
@@ -289,21 +402,30 @@ const navLinks = [
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
   }
 
   .mobile-nav-link {
     display: block;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--dark);
-    padding: 0.5rem 0;
+    padding: 0.65rem 0.75rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
   }
 
   .mobile-btn {
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 0.85rem;
+    padding: 0.75rem;
+    font-size: 0.95rem;
   }
 
   .mobile-hotline {
@@ -312,7 +434,11 @@ const navLinks = [
     color: var(--text-muted);
   }
 
-  @media (max-width: 900px) {
+  .mobile-hotline a {
+    color: #ef4444;
+  }
+
+  @media (max-width: 960px) {
     .nav-menu {
       display: none;
     }
@@ -322,8 +448,9 @@ const navLinks = [
     .nav-cta {
       display: none;
     }
-    .top-announcement .location-text,
-    .top-announcement .divider {
+    .top-announcement .timing-text,
+    .top-announcement .divider,
+    .top-announcement .location-text {
       display: none;
     }
   }

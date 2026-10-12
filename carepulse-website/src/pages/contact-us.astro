@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 
 const selectedDept = Astro.url.searchParams.get('dept') || 'Cardiology';
+const selectedDoctor = Astro.url.searchParams.get('doctor') || '';
 const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
 ---
 
@@ -84,6 +85,12 @@ const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
               </div>
             </div>
 
+            {selectedDoctor && (
+              <div class="doctor-selected-badge">
+                <span>Requesting Consultation with: <strong>{selectedDoctor}</strong></span>
+              </div>
+            )}
+
             <div class="form-group">
               <label for="message" class="form-label">Symptoms or Reason for Consultation *</label>
               <textarea
@@ -93,7 +100,7 @@ const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
                 rows="4"
                 placeholder="Briefly describe your symptoms, preferred appointment day, or inquiry details..."
                 required
-              ></textarea>
+              >{selectedDoctor ? `Requesting appointment with ${selectedDoctor}. ` : ''}</textarea>
             </div>
 
             <button type="submit" id="submitBtn" class="btn btn-primary submit-btn">
@@ -126,7 +133,12 @@ const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
           <div class="info-card">
             <h3>Clinic Location & Campus</h3>
             <div class="info-item">
-              <div class="info-icon">📍</div>
+              <div class="info-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
               <div>
                 <strong>CarePulse Health Center</strong>
                 <p>742 Evergreen Healthcare Ave, Metro City, ST 90210</p>
@@ -135,7 +147,12 @@ const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
             </div>
 
             <div class="info-item">
-              <div class="info-icon">✉️</div>
+              <div class="info-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="16" x="2" y="4" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </div>
               <div>
                 <strong>Direct Communications</strong>
                 <p>desk@carepulsehealth.com</p>
@@ -144,7 +161,12 @@ const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
             </div>
 
             <div class="info-item">
-              <div class="info-icon">🕒</div>
+              <div class="info-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
               <div>
                 <strong>Operating Schedule</strong>
                 <p>Monday - Friday: 8:00 AM – 8:00 PM</p>
@@ -182,7 +204,7 @@ const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      if (btnText) btnText.textContent = 'Submitting Request...';
+      if (btnText) btnText.textContent = 'Submitting to Clinic Desk...';
       if (submitBtn) submitBtn.setAttribute('disabled', 'true');
       alertBox.classList.add('hidden');
       alertBox.className = 'alert-box hidden';
@@ -205,20 +227,32 @@ const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
           body: JSON.stringify(payload),
         });
 
+        const data = await response.json().catch(() => null);
+
         if (!response.ok) {
-          throw new Error('Could not submit inquiry to server.');
+          const errDetail = data?.errors?.[0]?.message || `Server returned error (${response.status})`;
+          throw new Error(errDetail);
         }
 
-        alertBox.textContent =
-          '✓ Appointment inquiry submitted successfully! Our clinic coordinator will contact you shortly.';
+        const docId = data?.doc?.id || data?.doc?._id || 'REC-' + Math.floor(10000 + Math.random() * 90000);
+
+        alertBox.innerHTML = `
+          <div style="display:flex; flex-direction:column; gap:0.35rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+              <strong>Appointment Inquiry Logged in Backend!</strong>
+            </div>
+            <span>Reference ID: <code>${docId}</code></span>
+            <span style="font-size:0.85rem; color:#166534;">Your inquiry has been successfully transmitted and registered in the clinic database. Our coordinator will contact you at <strong>${payload.phone}</strong>.</span>
+          </div>
+        `;
         alertBox.className = 'alert-box alert-success';
         form.reset();
       } catch (err) {
-        // Friendly fallback message if server is temporarily unreachable
-        alertBox.textContent =
-          '✓ Appointment received! Our clinic desk will review your submission and call you at your provided phone number.';
-        alertBox.className = 'alert-box alert-success';
-        form.reset();
+        alertBox.innerHTML = `
+          <strong>Submission Error:</strong> ${err.message || 'Unable to communicate with Payload backend. Please verify http://localhost:3000 is running.'}
+        `;
+        alertBox.className = 'alert-box alert-error';
       } finally {
         if (btnText) btnText.textContent = 'Submit Appointment Request';
         if (submitBtn) submitBtn.removeAttribute('disabled');
@@ -283,6 +317,18 @@ const cmsUrl = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000';
     color: var(--text-muted);
     font-size: 0.95rem;
     line-height: 1.6;
+  }
+
+  .doctor-selected-badge {
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
+    border: 1px solid #7dd3fc;
+    color: #0369a1;
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
   }
 
   .form-row {

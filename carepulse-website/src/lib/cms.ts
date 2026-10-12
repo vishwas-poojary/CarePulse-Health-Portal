@@ -2,7 +2,7 @@ export interface Blog {
   id: string
   title: string
   slug: string
-  category: 'Heart Health' | 'General Wellness' | 'Pediatrics' | 'Mental Health' | string
+  category: 'Heart Health' | 'General Wellness' | 'Pediatrics' | 'Mental Health' | 'Dental' | string
   doctorName?: string
   excerpt?: string
   content?: any
@@ -12,6 +12,7 @@ export interface Blog {
     url?: string
     alt?: string
   } | string
+  imageUrl?: string
 }
 
 export interface AboutUsData {
@@ -27,6 +28,18 @@ export interface AboutUsData {
   }
 }
 
+export interface Doctor {
+  id: string
+  name: string
+  title: string
+  department: string
+  experience: string
+  focus: string
+  image: string
+  availableToday?: boolean
+  rating?: string
+}
+
 export interface EnquiryInput {
   patientName: string
   email: string
@@ -35,7 +48,106 @@ export interface EnquiryInput {
   message: string
 }
 
-const CMS_URL = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000'
+export const CMS_URL = import.meta.env.PUBLIC_CMS_URL || 'http://localhost:3000'
+
+// Curated high quality authentic medical & doctor photography from Pexels
+export const CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
+  'Heart Health': 'https://images.pexels.com/photos/7659564/pexels-photo-7659564.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'Pediatrics': 'https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'Mental Health': 'https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'General Wellness': 'https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'Dental': 'https://images.pexels.com/photos/3845810/pexels-photo-3845810.jpeg?auto=compress&cs=tinysrgb&w=800',
+}
+
+export function getCategoryFallbackImage(category: string): string {
+  return (
+    CATEGORY_FALLBACK_IMAGES[category] ||
+    'https://images.pexels.com/photos/8376277/pexels-photo-8376277.jpeg?auto=compress&cs=tinysrgb&w=800'
+  )
+}
+
+export function formatImageUrl(img: any, category: string = 'General Wellness'): string {
+  if (!img) return getCategoryFallbackImage(category)
+  if (typeof img === 'string') {
+    if (img.startsWith('http://') || img.startsWith('https://')) return img
+    return `${CMS_URL}${img.startsWith('/') ? '' : '/'}${img}`
+  }
+  if (img.url) {
+    if (img.url.startsWith('http://') || img.url.startsWith('https://')) return img.url
+    return `${CMS_URL}${img.url.startsWith('/') ? '' : '/'}${img.url}`
+  }
+  return getCategoryFallbackImage(category)
+}
+
+// Resilient fallback doctor list with authentic doctor portraits
+export const DOCTORS_DATA: Doctor[] = [
+  {
+    id: 'doc-1',
+    name: 'Dr. Sarah Jenkins, MD, FACC',
+    title: 'Senior Consultant & Chief of Cardiology',
+    department: 'Cardiology',
+    experience: '16+ Years',
+    focus: 'Preventive Cardiology & 4D Echo Diagnostics',
+    image: 'https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=800',
+    availableToday: true,
+    rating: '4.95',
+  },
+  {
+    id: 'doc-2',
+    name: 'Dr. Marcus Vance, FAAP',
+    title: 'Chief Pediatrician & Neonatologist',
+    department: 'Pediatrics',
+    experience: '14+ Years',
+    focus: 'Neonatal Care & Pediatric Pulmonology',
+    image: 'https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=800',
+    availableToday: true,
+    rating: '4.98',
+  },
+  {
+    id: 'doc-3',
+    name: 'Dr. Aris Thorne, MD',
+    title: 'Lead Internist & Preventive Medicine Specialist',
+    department: 'General Medicine',
+    experience: '12+ Years',
+    focus: 'Metabolic Health & Longevity Medicine',
+    image: 'https://images.pexels.com/photos/6234977/pexels-photo-6234977.jpeg?auto=compress&cs=tinysrgb&w=800',
+    availableToday: false,
+    rating: '4.92',
+  },
+  {
+    id: 'doc-4',
+    name: 'Dr. Chloe Martinez, DDS',
+    title: 'Chief Dental & Orthodontic Surgeon',
+    department: 'Dental',
+    experience: '10+ Years',
+    focus: 'Aesthetic Dentistry & Dental Implants',
+    image: 'https://images.pexels.com/photos/6529116/pexels-photo-6529116.jpeg?auto=compress&cs=tinysrgb&w=800',
+    availableToday: true,
+    rating: '4.96',
+  },
+  {
+    id: 'doc-5',
+    name: 'Dr. Elena Rostova, PhD, MD',
+    title: 'Head of Neuropsychiatry & Cognitive Health',
+    department: 'General Medicine',
+    experience: '15+ Years',
+    focus: 'Clinical Neuroscience & Stress Mitigation',
+    image: 'https://images.pexels.com/photos/5327656/pexels-photo-5327656.jpeg?auto=compress&cs=tinysrgb&w=800',
+    availableToday: true,
+    rating: '4.94',
+  },
+  {
+    id: 'doc-6',
+    name: 'Dr. Liam Montgomery, MD, FACS',
+    title: 'Lead Orthopedic & Sports Medicine Surgeon',
+    department: 'General Medicine',
+    experience: '18+ Years',
+    focus: 'Minimally Invasive Joint Replacement & Rehab',
+    image: 'https://images.pexels.com/photos/5327580/pexels-photo-5327580.jpeg?auto=compress&cs=tinysrgb&w=800',
+    availableToday: false,
+    rating: '4.97',
+  },
+]
 
 // Resilient fallback blogs
 const FALLBACK_BLOGS: Blog[] = [
@@ -45,6 +157,7 @@ const FALLBACK_BLOGS: Blog[] = [
     slug: 'healthy-heart-habits',
     category: 'Heart Health',
     doctorName: 'Dr. Sarah Jenkins, MD (Cardiology)',
+    imageUrl: 'https://images.pexels.com/photos/7659564/pexels-photo-7659564.jpeg?auto=compress&cs=tinysrgb&w=800',
     excerpt:
       'Cardiologist-approved lifestyle modifications, nutrition tips, and aerobic benchmarks to safeguard cardiovascular vitality and lower arterial pressure.',
     publishedDate: '2026-09-20T09:00:00.000Z',
@@ -94,6 +207,7 @@ const FALLBACK_BLOGS: Blog[] = [
     slug: 'pediatric-developmental-milestones',
     category: 'Pediatrics',
     doctorName: 'Dr. Marcus Vance, FAAP (Chief Pediatrician)',
+    imageUrl: 'https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=800',
     excerpt:
       'A comprehensive clinical breakdown of cognitive, motor, and speech developmental benchmarks in early childhood, plus when to seek pediatric consultation.',
     publishedDate: '2026-09-22T10:30:00.000Z',
@@ -127,6 +241,7 @@ const FALLBACK_BLOGS: Blog[] = [
     slug: 'overcoming-chronic-stress-burnout',
     category: 'Mental Health',
     doctorName: 'Dr. Elena Rostova, PhD (Neuropsychiatry)',
+    imageUrl: 'https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg?auto=compress&cs=tinysrgb&w=800',
     excerpt:
       'Understanding how sustained cortisol elevation impacts sleep architecture and gut health, alongside cognitive strategies for nervous system regulation.',
     publishedDate: '2026-09-25T14:15:00.000Z',
@@ -152,6 +267,7 @@ const FALLBACK_BLOGS: Blog[] = [
     slug: 'optimal-cellular-hydration-longevity',
     category: 'General Wellness',
     doctorName: 'Dr. Aris Thorne, MD (Preventive Medicine)',
+    imageUrl: 'https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?auto=compress&cs=tinysrgb&w=800',
     excerpt:
       'Why cellular electrolyte equilibrium matters more than simple fluid volume, and how micro-nutrient timing maximizes metabolic performance throughout the day.',
     publishedDate: '2026-09-28T11:00:00.000Z',
@@ -211,7 +327,7 @@ const FALLBACK_ABOUT_US: AboutUsData = {
 }
 
 /**
- * Fetch all published blogs from Payload CMS with robust fallback
+ * Fetch all published blogs from Payload CMS with dynamic cache bypassing
  */
 export async function getBlogs(category?: string): Promise<Blog[]> {
   try {
@@ -225,7 +341,10 @@ export async function getBlogs(category?: string): Promise<Blog[]> {
 
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { Accept: 'application/json' },
+      headers: {
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache, no-store',
+      },
     })
     clearTimeout(timeout)
 
@@ -246,6 +365,7 @@ export async function getBlogs(category?: string): Promise<Blog[]> {
         publishedDate: doc.publishedDate || doc.createdAt,
         status: doc.status || 'published',
         featuredImage: doc.featuredImage,
+        imageUrl: formatImageUrl(doc.featuredImage, doc.category),
       }))
     }
   } catch (err) {
@@ -253,14 +373,19 @@ export async function getBlogs(category?: string): Promise<Blog[]> {
   }
 
   // Filter fallback
+  const fallbackList = FALLBACK_BLOGS.map((b) => ({
+    ...b,
+    imageUrl: b.imageUrl || getCategoryFallbackImage(b.category),
+  }))
+
   if (category && category !== 'All') {
-    return FALLBACK_BLOGS.filter((b) => b.category === category)
+    return fallbackList.filter((b) => b.category === category)
   }
-  return FALLBACK_BLOGS
+  return fallbackList
 }
 
 /**
- * Fetch single blog by slug from Payload CMS with robust fallback
+ * Fetch single blog by slug from Payload CMS
  */
 export async function getBlogBySlug(slug: string): Promise<Blog | null> {
   try {
@@ -270,7 +395,10 @@ export async function getBlogBySlug(slug: string): Promise<Blog | null> {
 
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { Accept: 'application/json' },
+      headers: {
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache, no-store',
+      },
     })
     clearTimeout(timeout)
 
@@ -289,6 +417,7 @@ export async function getBlogBySlug(slug: string): Promise<Blog | null> {
           publishedDate: doc.publishedDate || doc.createdAt,
           status: doc.status || 'published',
           featuredImage: doc.featuredImage,
+          imageUrl: formatImageUrl(doc.featuredImage, doc.category),
         }
       }
     }
@@ -296,7 +425,14 @@ export async function getBlogBySlug(slug: string): Promise<Blog | null> {
     console.warn(`CMS fetch /api/blogs slug "${slug}" fallback:`, (err as Error).message)
   }
 
-  return FALLBACK_BLOGS.find((b) => b.slug === slug) || null
+  const found = FALLBACK_BLOGS.find((b) => b.slug === slug)
+  if (found) {
+    return {
+      ...found,
+      imageUrl: found.imageUrl || getCategoryFallbackImage(found.category),
+    }
+  }
+  return null
 }
 
 /**
@@ -310,7 +446,10 @@ export async function getAboutUs(): Promise<AboutUsData> {
 
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { Accept: 'application/json' },
+      headers: {
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache, no-store',
+      },
     })
     clearTimeout(timeout)
 
@@ -339,9 +478,18 @@ export async function getAboutUs(): Promise<AboutUsData> {
 }
 
 /**
+ * Get Doctors list
+ */
+export async function getDoctors(): Promise<Doctor[]> {
+  return DOCTORS_DATA
+}
+
+/**
  * Submit patient appointment or inquiry to Payload CMS
  */
-export async function submitEnquiry(input: EnquiryInput): Promise<{ success: boolean; message: string }> {
+export async function submitEnquiry(
+  input: EnquiryInput
+): Promise<{ success: boolean; message: string; docId?: string }> {
   try {
     const res = await fetch(`${CMS_URL}/api/enquiries`, {
       method: 'POST',
@@ -356,9 +504,13 @@ export async function submitEnquiry(input: EnquiryInput): Promise<{ success: boo
       throw new Error(errData?.errors?.[0]?.message || `Error status ${res.status}`)
     }
 
+    const json = await res.json()
+    const docId = json?.doc?.id || json?.doc?._id
+
     return {
       success: true,
-      message: 'Your appointment inquiry has been received! Our medical desk will contact you within 2 hours.',
+      message: 'Your appointment inquiry has been received! Stored in the clinic registry.',
+      docId,
     }
   } catch (error) {
     return {

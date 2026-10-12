@@ -45,6 +45,8 @@ export default buildConfig({
     fallback: true,
     defaultLocale: 'en',
   },
+  cors: ['http://localhost:4321', 'http://127.0.0.1:4321', 'http://localhost:3000', '*'],
+  csrf: ['http://localhost:4321', 'http://127.0.0.1:4321', 'http://localhost:3000'],
   plugins: [
     s3Storage({
       collections: {

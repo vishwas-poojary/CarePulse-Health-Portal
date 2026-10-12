@@ -2,75 +2,33 @@
 import Layout from '../layouts/Layout.astro';
 import DoctorCard from '../components/DoctorCard.astro';
 import RichText from '../components/RichText.astro';
-import { getAboutUs } from '../lib/cms';
+import { getAboutUs, getDoctors } from '../lib/cms';
 
-const aboutUs = await getAboutUs();
-
-const doctors = [
-  {
-    name: 'Dr. Sarah Jenkins, MD, FACC',
-    title: 'Senior Consultant & Chief of Cardiology',
-    department: 'Cardiology',
-    experience: '16+ Years',
-    focus: 'Preventive Cardiology, 4D Echocardiography, Angiography',
-  },
-  {
-    name: 'Dr. Marcus Vance, FAAP',
-    title: 'Chief Pediatrician & Neonatologist',
-    department: 'Pediatrics',
-    experience: '14+ Years',
-    focus: 'Pediatric Pulmonology, Neonatal Intensive Care, Immunization',
-  },
-  {
-    name: 'Dr. Aris Thorne, MD',
-    title: 'Lead Internist & Preventive Medicine Specialist',
-    department: 'General Medicine',
-    experience: '12+ Years',
-    focus: 'Metabolic Syndrome, Chronic Care, Preventive Geriatrics',
-  },
-  {
-    name: 'Dr. Chloe Martinez, DDS',
-    title: 'Chief Dental & Orthodontic Surgeon',
-    department: 'Dental',
-    experience: '10+ Years',
-    focus: 'Aesthetic Dentistry, Dental Implants, Pediatric Orthodontics',
-  },
-  {
-    name: 'Dr. Elena Rostova, PhD, MD',
-    title: 'Head of Neuropsychiatry & Cognitive Health',
-    department: 'General Medicine',
-    experience: '15+ Years',
-    focus: 'Clinical Neuroscience, Sleep Medicine, Stress Mitigation',
-  },
-  {
-    name: 'Dr. Liam Montgomery, MD, FACS',
-    title: 'Lead Orthopedic & Sports Medicine Surgeon',
-    department: 'General Medicine',
-    experience: '18+ Years',
-    focus: 'Minimally Invasive Joint Replacement, Sports Injury Rehab',
-  },
-];
+const [aboutUs, doctors] = await Promise.all([
+  getAboutUs(),
+  getDoctors(),
+]);
 
 const facilities = [
   {
+    id: 'standards',
     title: 'NABH & JCI Accredited Standards',
     desc: 'Exceeding rigorous international surgical protocols, hospital hygiene standards, and patient safety guidelines.',
-    icon: '🏥',
   },
   {
+    id: 'trauma',
     title: '24/7 Level 1 Trauma & Intensive Care',
     desc: 'Fully equipped multidisciplinary ICU with round-the-clock intensivists and emergency response paramedics.',
-    icon: '🚑',
   },
   {
+    id: 'imaging',
     title: 'High-Resolution Diagnostic Imaging',
     desc: 'Low-dose digital X-ray, high-field MRI, 128-slice CT scans, and point-of-care cardiac ultrasound suites.',
-    icon: '🔬',
   },
   {
+    id: 'records',
     title: 'Fully Digital Electronic Health Records',
     desc: 'Seamless, encrypted patient chart sharing ensuring zero lost tests, fast second opinions, and patient privacy.',
-    icon: '💻',
   },
 ];
 ---
@@ -127,6 +85,20 @@ const facilities = [
         </div>
 
         <div class="story-card-box">
+          <div class="story-photo-wrapper">
+            <img
+              src="https://images.pexels.com/photos/7088530/pexels-photo-7088530.jpeg?auto=compress&cs=tinysrgb&w=1000"
+              alt="CarePulse Physicians Reviewing Clinical Scans"
+              class="story-photo"
+              loading="lazy"
+              width="600"
+              height="380"
+            />
+            <div class="story-photo-caption">
+              <span>Multidisciplinary Clinical Review</span>
+            </div>
+          </div>
+
           <div class="core-values-card">
             <h3>Our Clinical Commitments</h3>
             <ul class="values-list">
@@ -151,12 +123,23 @@ const facilities = [
     <div class="container">
       <div class="mission-vision-grid">
         <div class="mv-card mission-card">
-          <div class="mv-icon">🎯</div>
+          <div class="mv-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="6"/>
+              <circle cx="12" cy="12" r="2"/>
+            </svg>
+          </div>
           <h3>Our Mission</h3>
           <p>{aboutUs.mission}</p>
         </div>
         <div class="mv-card vision-card">
-          <div class="mv-icon">🌟</div>
+          <div class="mv-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
           <h3>Our Vision</h3>
           <p>{aboutUs.vision}</p>
         </div>
@@ -197,7 +180,37 @@ const facilities = [
       <div class="facilities-grid">
         {facilities.map((fac) => (
           <div class="facility-card">
-            <span class="facility-icon">{fac.icon}</span>
+            <div class="facility-icon">
+              {fac.id === 'standards' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+              )}
+              {fac.id === 'trauma' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.48 12H2"/>
+                </svg>
+              )}
+              {fac.id === 'imaging' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 18h8"/>
+                  <path d="M3 22h18"/>
+                  <path d="m14 13 4 4"/>
+                  <circle cx="12" cy="6" r="4"/>
+                  <path d="M12 10v4"/>
+                </svg>
+              )}
+              {fac.id === 'records' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+                  <path d="M10 9H8"/>
+                  <path d="M16 13H8"/>
+                  <path d="M16 17H8"/>
+                </svg>
+              )}
+            </div>
             <h3 class="facility-title">{fac.title}</h3>
             <p class="facility-desc">{fac.desc}</p>
           </div>
@@ -295,6 +308,41 @@ const facilities = [
     font-size: 1.1rem;
     line-height: 1.75;
     color: var(--text-main);
+  }
+
+  .story-photo-wrapper {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-md);
+    background-color: #f1f5f9;
+    height: 260px;
+  }
+
+  .story-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    transition: transform 0.4s ease;
+  }
+
+  .story-photo-wrapper:hover .story-photo {
+    transform: scale(1.03);
+  }
+
+  .story-photo-caption {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    background: rgba(15, 23, 42, 0.85);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(4px);
   }
 
   .core-values-card {
