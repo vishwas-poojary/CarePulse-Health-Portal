@@ -71,6 +71,8 @@ export interface Config {
     media: Media;
     blogs: Blog;
     enquiries: Enquiry;
+    doctors: Doctor;
+    departments: Department;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +84,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     blogs: BlogsSelect<false> | BlogsSelect<true>;
     enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>;
+    doctors: DoctorsSelect<false> | DoctorsSelect<true>;
+    departments: DepartmentsSelect<false> | DepartmentsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -222,8 +226,42 @@ export interface Enquiry {
   patientName: string;
   email: string;
   phone: string;
-  preferredDepartment: 'Cardiology' | 'Pediatrics' | 'General Medicine' | 'Dental';
+  preferredDepartment: 'Cardiology' | 'Pediatrics' | 'General Medicine' | 'Dental' | 'Orthopedics' | 'Neurology';
   message: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "doctors".
+ */
+export interface Doctor {
+  id: string;
+  name: string;
+  title: string;
+  department: 'Cardiology' | 'Pediatrics' | 'General Medicine' | 'Dental' | 'Orthopedics' | 'Neurology';
+  experience: string;
+  focus: string;
+  imageUrl?: string | null;
+  photo?: (string | null) | Media;
+  rating?: string | null;
+  availableToday?: boolean | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "departments".
+ */
+export interface Department {
+  id: string;
+  name: string;
+  departmentKey: 'Cardiology' | 'Pediatrics' | 'General Medicine' | 'Dental' | 'Orthopedics' | 'Neurology';
+  shortDescription: string;
+  icon: 'Activity' | 'Baby' | 'Stethoscope' | 'Sparkles' | 'Bone' | 'Brain';
+  order?: number | null;
+  active?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -266,6 +304,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'enquiries';
         value: string | Enquiry;
+      } | null)
+    | ({
+        relationTo: 'doctors';
+        value: string | Doctor;
+      } | null)
+    | ({
+        relationTo: 'departments';
+        value: string | Department;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -382,6 +428,38 @@ export interface EnquiriesSelect<T extends boolean = true> {
   phone?: T;
   preferredDepartment?: T;
   message?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "doctors_select".
+ */
+export interface DoctorsSelect<T extends boolean = true> {
+  name?: T;
+  title?: T;
+  department?: T;
+  experience?: T;
+  focus?: T;
+  imageUrl?: T;
+  photo?: T;
+  rating?: T;
+  availableToday?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "departments_select".
+ */
+export interface DepartmentsSelect<T extends boolean = true> {
+  name?: T;
+  departmentKey?: T;
+  shortDescription?: T;
+  icon?: T;
+  order?: T;
+  active?: T;
   updatedAt?: T;
   createdAt?: T;
 }

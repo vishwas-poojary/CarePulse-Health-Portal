@@ -38,6 +38,8 @@ export const Enquiry: CollectionConfig = {
         { label: 'Pediatrics', value: 'Pediatrics' },
         { label: 'General Medicine', value: 'General Medicine' },
         { label: 'Dental', value: 'Dental' },
+        { label: 'Orthopedics', value: 'Orthopedics' },
+        { label: 'Neurology', value: 'Neurology' },
       ],
     },
     {

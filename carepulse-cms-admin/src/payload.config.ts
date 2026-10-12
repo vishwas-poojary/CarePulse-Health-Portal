@@ -18,6 +18,8 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Blogs } from './collections/Blogs'
 import { Enquiry } from './collections/Enquiry'
+import { Doctors } from './collections/Doctors'
+import { Departments } from './collections/Departments'
 import { AboutUs } from './globals/AboutUs'
 
 const filename = fileURLToPath(import.meta.url)
@@ -30,7 +32,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Blogs, Enquiry],
+  collections: [Users, Media, Blogs, Enquiry, Doctors, Departments],
   globals: [AboutUs],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'carepulse_secret_key_8492049103984102948',

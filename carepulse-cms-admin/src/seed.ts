@@ -388,6 +388,182 @@ async function seed() {
     console.log(`✓ Enquiries already present (${count} records)`)
   }
 
+  // 4. Seed Doctors collection
+  const doctorsCollection = db.collection('doctors')
+  const initialDoctors = [
+    {
+      name: 'Dr. Sarah Jenkins, MD, FACC',
+      title: 'Senior Consultant & Chief of Cardiology',
+      department: 'Cardiology',
+      experience: '16+ Years',
+      focus: 'Preventive Cardiology & 4D Echo Diagnostics',
+      imageUrl: 'https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=800',
+      rating: '4.95',
+      availableToday: true,
+      order: 1,
+    },
+    {
+      name: 'Dr. Marcus Vance, FAAP',
+      title: 'Chief Pediatrician & Neonatologist',
+      department: 'Pediatrics',
+      experience: '14+ Years',
+      focus: 'Neonatal Care & Pediatric Pulmonology',
+      imageUrl: 'https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=800',
+      rating: '4.98',
+      availableToday: true,
+      order: 2,
+    },
+    {
+      name: 'Dr. Aris Thorne, MD',
+      title: 'Lead Internist & Preventive Medicine Specialist',
+      department: 'General Medicine',
+      experience: '12+ Years',
+      focus: 'Metabolic Health & Longevity Medicine',
+      imageUrl: 'https://images.pexels.com/photos/6234977/pexels-photo-6234977.jpeg?auto=compress&cs=tinysrgb&w=800',
+      rating: '4.92',
+      availableToday: false,
+      order: 3,
+    },
+    {
+      name: 'Dr. Chloe Martinez, DDS',
+      title: 'Chief Dental & Orthodontic Surgeon',
+      department: 'Dental',
+      experience: '10+ Years',
+      focus: 'Aesthetic Dentistry & Dental Implants',
+      imageUrl: 'https://images.pexels.com/photos/6529116/pexels-photo-6529116.jpeg?auto=compress&cs=tinysrgb&w=800',
+      rating: '4.96',
+      availableToday: true,
+      order: 4,
+    },
+    {
+      name: 'Dr. Elena Rostova, PhD, MD',
+      title: 'Head of Neuropsychiatry & Cognitive Health',
+      department: 'Neurology',
+      experience: '15+ Years',
+      focus: 'Clinical Neuroscience & Stress Mitigation',
+      imageUrl: 'https://images.pexels.com/photos/5327656/pexels-photo-5327656.jpeg?auto=compress&cs=tinysrgb&w=800',
+      rating: '4.94',
+      availableToday: true,
+      order: 5,
+    },
+    {
+      name: 'Dr. Liam Montgomery, MD, FACS',
+      title: 'Lead Orthopedic & Sports Medicine Surgeon',
+      department: 'Orthopedics',
+      experience: '18+ Years',
+      focus: 'Minimally Invasive Joint Replacement & Rehab',
+      imageUrl: 'https://images.pexels.com/photos/5327580/pexels-photo-5327580.jpeg?auto=compress&cs=tinysrgb&w=800',
+      rating: '4.97',
+      availableToday: false,
+      order: 6,
+    },
+  ]
+
+  for (const doc of initialDoctors) {
+    const existing = await doctorsCollection.findOne({ name: doc.name })
+    if (existing) {
+      await doctorsCollection.updateOne(
+        { name: doc.name },
+        {
+          $set: {
+            ...doc,
+            updatedAt: new Date().toISOString(),
+          },
+        }
+      )
+      console.log(`✓ Updated doctor: ${doc.name}`)
+    } else {
+      await doctorsCollection.insertOne({
+        ...doc,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
+      console.log(`✓ Inserted doctor: ${doc.name}`)
+    }
+  }
+
+  // 5. Seed Departments collection
+  const deptCollection = db.collection('departments')
+  const initialDepartments = [
+    {
+      name: 'Cardiology & Heart Care',
+      departmentKey: 'Cardiology',
+      shortDescription:
+        'Advanced ECG, echocardiography, preventive vascular evaluations, and cardiac rehabilitation.',
+      icon: 'Activity',
+      order: 1,
+      active: true,
+    },
+    {
+      name: 'Pediatrics & Child Health',
+      departmentKey: 'Pediatrics',
+      shortDescription:
+        'From newborn neonatal care to adolescent wellness, milestone tracking, and routine vaccinations.',
+      icon: 'Baby',
+      order: 2,
+      active: true,
+    },
+    {
+      name: 'General & Internal Medicine',
+      departmentKey: 'General Medicine',
+      shortDescription:
+        'Comprehensive adult diagnostics, chronic disease management, and full-body preventive health checkups.',
+      icon: 'Stethoscope',
+      order: 3,
+      active: true,
+    },
+    {
+      name: 'Comprehensive Dental Clinic',
+      departmentKey: 'Dental',
+      shortDescription:
+        'Pediatric dentistry, cosmetic restorations, orthodontics, and restorative oral surgery.',
+      icon: 'Sparkles',
+      order: 4,
+      active: true,
+    },
+    {
+      name: 'Orthopedics & Joint Care',
+      departmentKey: 'Orthopedics',
+      shortDescription:
+        'Joint replacement, arthroscopic surgery, sports medicine, and specialized rehabilitation therapy.',
+      icon: 'Bone',
+      order: 5,
+      active: true,
+    },
+    {
+      name: 'Neuropsychiatry & Wellness',
+      departmentKey: 'Neurology',
+      shortDescription:
+        'Cognitive behavioral support, neurological evaluations, and burnout mitigation therapies.',
+      icon: 'Brain',
+      order: 6,
+      active: true,
+    },
+  ]
+
+  for (const dept of initialDepartments) {
+    const existing = await deptCollection.findOne({ departmentKey: dept.departmentKey })
+    if (existing) {
+      await deptCollection.updateOne(
+        { departmentKey: dept.departmentKey },
+        {
+          $set: {
+            ...dept,
+            updatedAt: new Date().toISOString(),
+          },
+        }
+      )
+      console.log(`✓ Updated department: ${dept.name}`)
+    } else {
+      await deptCollection.insertOne({
+        ...dept,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
+      console.log(`✓ Inserted department: ${dept.name}`)
+    }
+  }
+
   console.log('Database seeding successfully finished!')
   await client.close()
 }

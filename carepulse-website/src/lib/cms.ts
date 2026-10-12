@@ -38,13 +38,31 @@ export interface Doctor {
   image: string
   availableToday?: boolean
   rating?: string
+  order?: number
+}
+
+export interface Department {
+  id: string
+  name: string
+  departmentKey: string
+  shortDescription: string
+  icon: string
+  order?: number
+  active?: boolean
 }
 
 export interface EnquiryInput {
   patientName: string
   email: string
   phone: string
-  preferredDepartment: 'Cardiology' | 'Pediatrics' | 'General Medicine' | 'Dental' | string
+  preferredDepartment:
+    | 'Cardiology'
+    | 'Pediatrics'
+    | 'General Medicine'
+    | 'Dental'
+    | 'Orthopedics'
+    | 'Neurology'
+    | string
   message: string
 }
 
@@ -477,11 +495,150 @@ export async function getAboutUs(): Promise<AboutUsData> {
   return FALLBACK_ABOUT_US
 }
 
+export const FALLBACK_DEPARTMENTS: Department[] = [
+  {
+    id: 'cardiology',
+    name: 'Cardiology & Heart Care',
+    departmentKey: 'Cardiology',
+    shortDescription:
+      'Advanced ECG, echocardiography, preventive vascular evaluations, and cardiac rehabilitation.',
+    icon: 'Activity',
+    order: 1,
+    active: true,
+  },
+  {
+    id: 'pediatrics',
+    name: 'Pediatrics & Child Health',
+    departmentKey: 'Pediatrics',
+    shortDescription:
+      'From newborn neonatal care to adolescent wellness, milestone tracking, and routine vaccinations.',
+    icon: 'Baby',
+    order: 2,
+    active: true,
+  },
+  {
+    id: 'medicine',
+    name: 'General & Internal Medicine',
+    departmentKey: 'General Medicine',
+    shortDescription:
+      'Comprehensive adult diagnostics, chronic disease management, and full-body preventive health checkups.',
+    icon: 'Stethoscope',
+    order: 3,
+    active: true,
+  },
+  {
+    id: 'dental',
+    name: 'Comprehensive Dental Clinic',
+    departmentKey: 'Dental',
+    shortDescription:
+      'Pediatric dentistry, cosmetic restorations, orthodontics, and restorative oral surgery.',
+    icon: 'Sparkles',
+    order: 4,
+    active: true,
+  },
+  {
+    id: 'orthopedics',
+    name: 'Orthopedics & Joint Care',
+    departmentKey: 'Orthopedics',
+    shortDescription:
+      'Joint replacement, arthroscopic surgery, sports medicine, and specialized rehabilitation therapy.',
+    icon: 'Bone',
+    order: 5,
+    active: true,
+  },
+  {
+    id: 'neuro',
+    name: 'Neuropsychiatry & Wellness',
+    departmentKey: 'Neurology',
+    shortDescription:
+      'Cognitive behavioral support, neurological evaluations, and burnout mitigation therapies.',
+    icon: 'Brain',
+    order: 6,
+    active: true,
+  },
+]
+
 /**
- * Get Doctors list
+ * Fetch Doctors list dynamically from Payload CMS with fallback
  */
 export async function getDoctors(): Promise<Doctor[]> {
+  try {
+    const url = `${CMS_URL}/api/doctors?limit=50&sort=order`
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 4000)
+
+    const res = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache, no-store',
+      },
+    })
+    clearTimeout(timeout)
+
+    if (res.ok) {
+      const data = await res.json()
+      if (Array.isArray(data?.docs) && data.docs.length > 0) {
+        return data.docs.map((doc: any) => ({
+          id: doc.id || doc._id,
+          name: doc.name,
+          title: doc.title,
+          department: doc.department || 'General Medicine',
+          experience: doc.experience || '10+ Years',
+          focus: doc.focus || '',
+          image: formatImageUrl(doc.photo || doc.imageUrl, doc.department),
+          availableToday: doc.availableToday ?? true,
+          rating: doc.rating || '4.95',
+          order: doc.order || 1,
+        }))
+      }
+    }
+  } catch (err) {
+    console.warn('CMS fetch /api/doctors fallback activated:', (err as Error).message)
+  }
+
   return DOCTORS_DATA
+}
+
+/**
+ * Fetch Clinical Departments dynamically from Payload CMS with fallback
+ */
+export async function getDepartments(): Promise<Department[]> {
+  try {
+    const url = `${CMS_URL}/api/departments?limit=50&sort=order`
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 4000)
+
+    const res = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache, no-store',
+      },
+    })
+    clearTimeout(timeout)
+
+    if (res.ok) {
+      const data = await res.json()
+      if (Array.isArray(data?.docs) && data.docs.length > 0) {
+        return data.docs
+          .filter((d: any) => d.active !== false)
+          .map((doc: any) => ({
+            id: doc.id || doc._id,
+            name: doc.name,
+            departmentKey: doc.departmentKey || 'General Medicine',
+            shortDescription: doc.shortDescription || '',
+            icon: doc.icon || 'Stethoscope',
+            order: doc.order || 1,
+            active: doc.active ?? true,
+          }))
+      }
+    }
+  } catch (err) {
+    console.warn('CMS fetch /api/departments fallback activated:', (err as Error).message)
+  }
+
+  return FALLBACK_DEPARTMENTS
 }
 
 /**
