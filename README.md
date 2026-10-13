@@ -1,77 +1,43 @@
-# 🏥 CarePulse Health Portal
+# Astro Starter Kit: Minimal
 
-> Multispeciality Clinic & Doctor Portal with **Payload CMS 3.x (MongoDB & Cloudflare R2)** and **Astro Frontend**.
-
----
-
-## 🚀 Quick Start (One Command)
-
-From the project root (`c:\Exelon\CarePulse-Health-Portal`):
-
-```bash
-# 1. Run both CMS and Astro Frontend concurrently
-npm run dev
+```sh
+npm create astro@latest -- --template minimal
 ```
 
-This will launch:
-- 🩺 **Astro Website (Frontend):** [http://localhost:4321](http://localhost:4321)
-- ⚙️ **Payload CMS (Admin & REST API):** [http://localhost:3000](http://localhost:3000)
-- 🔑 **Payload Admin Panel:** [http://localhost:3000/admin](http://localhost:3000/admin)
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
----
+## 🚀 Project Structure
 
-## 💻 Running Services Individually
+Inside of your Astro project, you'll see the following folders and files:
 
-### 1. Payload CMS Backend (`carepulse-cms-admin`)
-```bash
-# Run only CMS from root
-npm run dev:cms
-
-# Or navigate to folder:
-cd carepulse-cms-admin
-npm run dev
-```
-- Admin URL: `http://localhost:3000/admin`
-- REST APIs:
-  - `GET http://localhost:3000/api/blogs`
-  - `GET http://localhost:3000/api/globals/about-us`
-  - `POST http://localhost:3000/api/enquiries`
-
-### 2. Astro Frontend (`carepulse-website`)
-```bash
-# Run only Astro website from root
-npm run dev:website
-
-# Or navigate to folder:
-cd carepulse-website
-npm run dev
-```
-- Website URL: `http://localhost:4321`
-- Pages:
-  - `/` — Homepage (Hero, Live Stats, Specialties, Doctors)
-  - `/blogs` — Health Tips directory with category filters
-  - `/blogs/[slug]` — Doctor-authored article detail page
-  - `/about-us` — Clinic story, mission, vision, and doctor profiles
-  - `/contact-us` — Interactive appointment booking form
-
----
-
-## 🛠️ Additional Useful Commands
-
-```bash
-# Re-seed doctor-themed blogs, about-us stats, and sample enquiries
-npm run seed
-
-# Run CSpell spell check
-npm run lint:spell
-
-# Build the Astro website for production
-npm run build
+```text
+/
+├── public/
+├── src/
+│   └── pages/
+│       └── index.astro
+└── package.json
 ```
 
----
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-## 📦 Architecture & Technologies
-- **Backend:** Payload CMS 3.x, Next.js 16 (Turbopack), MongoDB Atlas (`@payloadcms/db-mongodb`), Cloudflare R2 (`@payloadcms/storage-s3`)
-- **Frontend:** Astro 5.x / 7.x, Lexical RichText AST renderer, Vanilla CSS design tokens
-- **DevOps:** GitHub Actions CI/CD (`.github/workflows/ci.yml`), Husky Git Hooks (`pre-commit`, `pre-push`), CSpell
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+
+Any static assets, like images, can be placed in the `public/` directory.
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
