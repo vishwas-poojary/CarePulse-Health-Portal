@@ -1,0 +1,14 @@
+title = "CarePulse Health Portal Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Global allowlist for build outputs, dependencies, and lockfiles"
+paths = [
+  '''(^|/)node_modules/''',
+  '''(^|/)dist/''',
+  '''(^|/)\.astro/''',
+  '''package-lock\.json''',
+  '''\.trivycache/'''
+]

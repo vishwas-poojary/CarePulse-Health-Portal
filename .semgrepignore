@@ -1,0 +1,12 @@
+# Dependency and build directories
+node_modules/
+dist/
+.astro/
+.npm/
+.trivycache/
+package-lock.json
+
+# Test and coverage artifacts
+coverage/
+*.min.js
+*.bundle.js

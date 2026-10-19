@@ -207,7 +207,29 @@ Run these scripts from the project root:
 | `npm run dev` | Starts local development server at `localhost:4321` |
 | `npm run build` | Compiles and builds production-optimized site to `./dist/` |
 | `npm run preview` | Starts a local server to preview your `./dist/` production build |
+| `npm run lint` | Runs spell check across all project files using CSpell |
+| `npm run lint:spell` | Direct invocation of CSpell spell checker |
+| `npm run security:gitleaks` | Detects hardcoded secrets, tokens, and credentials via Gitleaks |
+| `npm run security:semgrep` | Runs SAST static analysis for vulnerability detection via Semgrep |
+| `npm run security:trivy` | Scans dependencies and filesystem vulnerabilities via Trivy |
 | `npx astro check` | Runs diagnostic and type checks across `.astro` and `.ts` files |
+
+---
+
+## 🔒 Security Scanning & DevSecOps
+
+This project enforces automated security scanning across three essential domains:
+
+| Tool | Focus | Config File | CI Integration |
+| :--- | :--- | :--- | :--- |
+| **Gitleaks** | Secret detection (API keys, passwords, private tokens) | [`.gitleaks.toml`](file:///.gitleaks.toml) | Automated in `.gitlab-ci.yml` |
+| **Semgrep** | Static Application Security Testing (SAST) for JS/TS/Astro | [`.semgrepignore`](file:///.semgrepignore) | Automated in `.gitlab-ci.yml` |
+| **Trivy** | Filesystem & dependency CVE and misconfiguration scanning | [`trivy.yaml`](file:///trivy.yaml) | Automated in `.gitlab-ci.yml` |
+
+The root [`.gitlab-ci.yml`](file:///.gitlab-ci.yml) pipeline automatically runs:
+1. **Linting & Spell Checking** (`npm run lint:spell`)
+2. **Security Suite** (concurrent `gitleaks`, `semgrep`, and `trivy` jobs generating artifact reports)
+3. **Production Build** (`npm run build`)
 
 ---
 

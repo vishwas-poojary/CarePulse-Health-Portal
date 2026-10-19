@@ -1,0 +1,18 @@
+# Trivy scanner configuration
+scan:
+  scanners:
+    - vuln
+    - misconfig
+    - secret
+  skip-dirs:
+    - node_modules
+    - dist
+    - .astro
+    - .npm
+    - .trivycache
+
+severity:
+  - HIGH
+  - CRITICAL
+
+exit-code: 1

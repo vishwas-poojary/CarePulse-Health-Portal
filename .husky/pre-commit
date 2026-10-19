@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running pre-commit security and spell checks..."
+
+# 1. Spell Check
+npm run lint:spell
+
+# 2. Secret Scan with Gitleaks (protect staged files if gitleaks is installed)
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --verbose
+else
+  echo "gitleaks binary not found on local PATH, skipping local staged scan."
+fi

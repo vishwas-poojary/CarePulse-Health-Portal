@@ -1,0 +1,113 @@
+# ==============================================================================
+# CarePulse Health Portal - GitLab CI/CD Pipeline
+# Includes: Linting/Spellcheck, Security (Gitleaks, Semgrep SAST, Trivy), Build
+# ==============================================================================
+
+stages:
+  - test
+  - security
+  - build
+
+default:
+  interruptible: true
+
+variables:
+  GIT_DEPTH: 0 # Full git history required for secret detection and commit auditing
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+
+# Cached dependencies configuration for Node jobs
+.node-cache: &node-cache
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+      - node_modules/
+
+# ------------------------------------------------------------------------------
+# 1. LINT & SPELL CHECK
+# ------------------------------------------------------------------------------
+lint:spell:
+  stage: test
+  image: node:22-alpine
+  <<: *node-cache
+  before_script:
+    - npm ci --cache .npm --prefer-offline
+  script:
+    - npm run lint:spell
+
+# ------------------------------------------------------------------------------
+# 2. SECURITY: GITLEAKS (Secret & Credential Leak Detection)
+# ------------------------------------------------------------------------------
+security:gitleaks:
+  stage: security
+  image:
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+  script:
+    - gitleaks detect --verbose --source . --report-path gitleaks-report.json --report-format json
+  artifacts:
+    when: always
+    paths:
+      - gitleaks-report.json
+    expire_in: 7 days
+
+# ------------------------------------------------------------------------------
+# 3. SECURITY: SEMGREP (Static Application Security Testing - SAST)
+# ------------------------------------------------------------------------------
+security:semgrep:
+  stage: security
+  image:
+    name: semgrep/semgrep:latest
+    entrypoint: [""]
+  variables:
+    SEMGREP_RULES: "p/default p/javascript p/typescript p/owasp-top-ten"
+  script:
+    - semgrep scan --config $SEMGREP_RULES --error --json -o semgrep-report.json
+  artifacts:
+    when: always
+    paths:
+      - semgrep-report.json
+    reports:
+      sast: semgrep-report.json
+    expire_in: 7 days
+
+# ------------------------------------------------------------------------------
+# 4. SECURITY: TRIVY (Vulnerability, Secret, & Misconfiguration Scanner)
+# ------------------------------------------------------------------------------
+security:trivy:
+  stage: security
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  variables:
+    TRIVY_NO_PROGRESS: "true"
+    TRIVY_CACHE_DIR: ".trivycache/"
+  cache:
+    paths:
+      - .trivycache/
+  script:
+    - trivy fs --config trivy.yaml --exit-code 0 --format table .
+    - trivy fs --config trivy.yaml --exit-code 1 --severity HIGH,CRITICAL --format json -o trivy-report.json .
+  artifacts:
+    when: always
+    paths:
+      - trivy-report.json
+    expire_in: 7 days
+
+# ------------------------------------------------------------------------------
+# 5. BUILD APPLICATION
+# ------------------------------------------------------------------------------
+build:
+  stage: build
+  image: node:22-alpine
+  <<: *node-cache
+  before_script:
+    - npm ci --cache .npm --prefer-offline
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 7 days

@@ -440,7 +440,7 @@ export async function getBlogBySlug(slug: string): Promise<Blog | null> {
       }
     }
   } catch (err) {
-    console.warn(`CMS fetch /api/blogs slug "${slug}" fallback:`, (err as Error).message)
+    console.warn('CMS fetch /api/blogs slug fallback:', slug, (err as Error).message)
   }
 
   const found = FALLBACK_BLOGS.find((b) => b.slug === slug)

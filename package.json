@@ -9,9 +9,17 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint:spell": "cspell \"**/*.{ts,astro,md,json}\" --no-progress",
+    "lint": "npm run lint:spell",
+    "security:gitleaks": "gitleaks detect --verbose --source .",
+    "security:semgrep": "semgrep scan --config auto",
+    "security:trivy": "trivy fs --config trivy.yaml ."
   },
   "dependencies": {
     "astro": "^7.3.8"
+  },
+  "devDependencies": {
+    "cspell": "^10.4.0"
   }
 }
