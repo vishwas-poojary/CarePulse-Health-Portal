@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/_/husky.sh"
 
-echo "Running pre-commit security and spell checks..."
+echo "Running pre-commit code lint, spell check, and security checks..."
 
-# 1. Spell Check
-npm run lint:spell
+# 1. Code Lint & Spell Check
+npm run lint
 
 # 2. Secret Scan with Gitleaks (protect staged files if gitleaks is installed)
 if command -v gitleaks >/dev/null 2>&1; then

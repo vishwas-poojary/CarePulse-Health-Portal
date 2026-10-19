@@ -1,11 +1,22 @@
 ---
+interface LexicalNode {
+  text?: string;
+  format?: number;
+  type?: string;
+  tag?: string;
+  url?: string;
+  listType?: string;
+  children?: LexicalNode[];
+  [key: string]: unknown;
+}
+
 interface Props {
-  content: any;
+  content: unknown;
 }
 
 const { content } = Astro.props;
 
-function renderNode(node: any): string {
+function renderNode(node: LexicalNode | string | null | undefined): string {
   if (!node) return '';
 
   if (typeof node === 'string') {

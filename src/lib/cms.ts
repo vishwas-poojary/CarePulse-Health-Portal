@@ -5,7 +5,7 @@ export interface Blog {
   category: 'Heart Health' | 'General Wellness' | 'Pediatrics' | 'Mental Health' | 'Dental' | string
   doctorName?: string
   excerpt?: string
-  content?: any
+  content?: unknown
   publishedDate?: string
   status?: 'draft' | 'published'
   featuredImage?: {
@@ -20,7 +20,7 @@ export interface AboutUsData {
   tagline: string
   mission: string
   vision: string
-  story?: any
+  story?: unknown
   keyStats: {
     yearsOfExperience: number
     specialistDoctors: number
@@ -84,7 +84,7 @@ export function getCategoryFallbackImage(category: string): string {
   )
 }
 
-export function formatImageUrl(img: any, category: string = 'General Wellness'): string {
+export function formatImageUrl(img: { url?: string } | string | null | undefined, category: string = 'General Wellness'): string {
   if (!img) return getCategoryFallbackImage(category)
   if (typeof img === 'string') {
     if (img.startsWith('http://') || img.startsWith('https://')) return img
@@ -372,7 +372,7 @@ export async function getBlogs(category?: string): Promise<Blog[]> {
 
     const data = await res.json()
     if (Array.isArray(data?.docs) && data.docs.length > 0) {
-      return data.docs.map((doc: any) => ({
+      return (data.docs as Record<string, unknown>[]).map((doc) => ({
         id: doc.id || doc._id,
         title: doc.title,
         slug: doc.slug,
@@ -579,7 +579,7 @@ export async function getDoctors(): Promise<Doctor[]> {
     if (res.ok) {
       const data = await res.json()
       if (Array.isArray(data?.docs) && data.docs.length > 0) {
-        return data.docs.map((doc: any) => ({
+        return (data.docs as Record<string, unknown>[]).map((doc) => ({
           id: doc.id || doc._id,
           name: doc.name,
           title: doc.title,
@@ -621,9 +621,9 @@ export async function getDepartments(): Promise<Department[]> {
     if (res.ok) {
       const data = await res.json()
       if (Array.isArray(data?.docs) && data.docs.length > 0) {
-        return data.docs
-          .filter((d: any) => d.active !== false)
-          .map((doc: any) => ({
+        return (data.docs as Record<string, unknown>[])
+          .filter((d) => d.active !== false)
+          .map((doc) => ({
             id: doc.id || doc._id,
             name: doc.name,
             departmentKey: doc.departmentKey || 'General Medicine',
