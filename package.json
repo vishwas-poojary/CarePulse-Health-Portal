@@ -9,10 +9,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "prepare": "husky",
     "bump-version": "node scripts/bump-version.ts",
     "lint:code": "eslint .",
     "lint:spell": "cspell \"**/*.{ts,astro,md,json}\" --no-progress",
     "lint": "eslint . && npm run lint:spell",
+    "spellcheck": "npm run lint:spell",
+    "gitleaks": "gitleaks detect --verbose --source .",
+    "semgrep": "semgrep scan --config auto",
+    "trivy": "trivy fs --config trivy.yaml .",
     "security:gitleaks": "gitleaks detect --verbose --source .",
     "security:semgrep": "semgrep scan --config auto",
     "security:trivy": "trivy fs --config trivy.yaml ."
@@ -27,6 +32,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.13.0",
+    "husky": "^9.1.7",
     "typescript-eslint": "^8.71.2"
   }
 }

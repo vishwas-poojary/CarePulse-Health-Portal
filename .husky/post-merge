@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Get current branch
+BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || git branch --show-current)
+
+# Only run version bump on specific branches
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ] || [ "$BRANCH" = "stage" ] || [ "$BRANCH" = "dev" ]; then
+    echo "🎯 Detected merge on $BRANCH branch"
+    echo "🚀 Running automatic version bump..."
+    npm run bump-version
+    
+    # Stage the updated version files if modified
+    if [ -f "version.json" ]; then
+        git add version.json package.json
+        echo "✅ Updated version.json and package.json staged"
+    fi
+else
+    echo "ℹ️  No version bump needed for branch: $BRANCH"
+fi

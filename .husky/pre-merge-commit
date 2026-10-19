@@ -1,0 +1,9 @@
+#!/bin/sh
+
+echo "🚀 Running version bump script before merge commit..."
+
+npm run bump-version
+
+if [ -f "version.json" ]; then
+    git add version.json package.json
+fi

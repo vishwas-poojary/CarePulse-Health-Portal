@@ -1,14 +1,7 @@
-#!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
-
-echo "Running pre-commit code lint, spell check, and security checks..."
-
-# 1. Code Lint & Spell Check
+#!/bin/sh
+# Run code lint, build, and security checks defined in package.json
 npm run lint
-
-# 2. Secret Scan with Gitleaks (protect staged files if gitleaks is installed)
-if command -v gitleaks >/dev/null 2>&1; then
-  gitleaks protect --staged --verbose
-else
-  echo "gitleaks binary not found on local PATH, skipping local staged scan."
-fi
+npm run build
+npm run gitleaks
+npm run semgrep
+npm run trivy
