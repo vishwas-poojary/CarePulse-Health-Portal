@@ -1,0 +1,491 @@
+---
+import Layout from '../layouts/Layout.astro';
+import versionData from '../../version.json';
+---
+
+<Layout
+  title="System Version & Deploy Manifest | CarePulse Health"
+  description="Verify the deployment manifest, release version, and operational telemetry for CarePulse Health portal."
+>
+  <main class="version-manifest-page">
+    <!-- Ambient Background Blobs -->
+    <div class="glow-orb orb-primary" aria-hidden="true"></div>
+    <div class="glow-orb orb-secondary" aria-hidden="true"></div>
+
+    <div class="container version-container">
+      <div class="manifest-card">
+        <!-- Subtle Background Decorative Icon -->
+        <div class="card-bg-decoration" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+
+        <!-- Manifest Header -->
+        <header class="manifest-header">
+          <div class="badge-system">
+            <span class="live-dot"></span>
+            <span>Clinical System Architecture</span>
+          </div>
+          <h1 class="manifest-title">
+            Deploy <span class="highlight-text">Manifest.</span>
+          </h1>
+          <p class="manifest-subtitle">
+            Real-time build verification, platform telemetry, and release tracking for the CarePulse Healthcare Portal.
+          </p>
+        </header>
+
+        <!-- Information Metric Grid -->
+        <div class="metrics-grid">
+          <!-- Build Version Card -->
+          <div class="metric-card primary-card">
+            <div class="metric-header">
+              <span class="metric-label">Build Identifier</span>
+              <span class="status-pill">
+                <span class="pulse-indicator"></span>
+                Active
+              </span>
+            </div>
+            <div class="metric-value version-number">
+              v{versionData.version}
+            </div>
+            <div class="metric-caption">
+              Production Release Version
+            </div>
+          </div>
+
+          <!-- Last Synchronization Card -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Last Synchronization</span>
+              <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div class="metric-value date-value">
+              {versionData.lastMergeDate}
+            </div>
+            <div class="metric-caption">
+              Synchronized (IST / Indian Standard Time)
+            </div>
+          </div>
+
+          <!-- Architecture & Engine Card -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Core Engine</span>
+              <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <div class="metric-value platform-value">
+              Astro 7.x &bull; Node.js
+            </div>
+            <div class="metric-caption">
+              Payload CMS 3.x &bull; Enterprise Health Portal
+            </div>
+          </div>
+
+          <!-- Service Health Card -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">System Health</span>
+              <svg class="metric-icon success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <div class="metric-value status-value">
+              Operational
+            </div>
+            <div class="metric-caption">
+              100% Clinical Endpoints Responsive
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions & Metadata -->
+        <footer class="manifest-footer">
+          <div class="actions-group">
+            <a href="/" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              Return to Healthcare Portal
+            </a>
+            <a href="/contact-us" class="btn btn-outline">
+              Clinical Support
+            </a>
+          </div>
+
+          <div class="credits">
+            <span>CarePulse Health Portal Engineering Desk &bull; NABH & JCI Standards</span>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .version-manifest-page {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1.5rem;
+    overflow: hidden;
+    background-color: var(--bg-page);
+  }
+
+  /* Ambient Blur Accents */
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.22;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .orb-primary {
+    top: -10%;
+    right: -5%;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  }
+
+  .orb-secondary {
+    bottom: -10%;
+    left: -5%;
+    width: 440px;
+    height: 440px;
+    background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+  }
+
+  .version-container {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Manifest Card */
+  .manifest-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(2, 132, 199, 0.14);
+    border-radius: 28px;
+    padding: 3.5rem 3rem;
+    box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    overflow: hidden;
+    animation: fadeInCard 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .card-bg-decoration {
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 220px;
+    height: 220px;
+    opacity: 0.03;
+    pointer-events: none;
+    color: var(--primary);
+    transform: rotate(15deg);
+  }
+
+  /* Manifest Header */
+  .manifest-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .badge-system {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background-color: var(--primary-light);
+    border: 1px solid var(--primary-subtle);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--primary);
+    margin-bottom: 1.25rem;
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+    animation: pulseDot 2s infinite;
+  }
+
+  .manifest-title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+
+  .highlight-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-style: italic;
+  }
+
+  .manifest-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Metrics Grid */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .metric-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.4rem 1.5rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .metric-card:hover {
+    border-color: rgba(2, 132, 199, 0.35);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .primary-card {
+    border-color: rgba(2, 132, 199, 0.25);
+    background: linear-gradient(180deg, #ffffff 0%, var(--primary-light) 100%);
+  }
+
+  .metric-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .metric-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-light);
+  }
+
+  .metric-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--primary);
+  }
+
+  .metric-icon.success-icon {
+    color: var(--accent);
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.6rem;
+    background-color: var(--accent-light);
+    color: var(--accent);
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .pulse-indicator {
+    width: 6px;
+    height: 6px;
+    background-color: var(--accent);
+    border-radius: 50%;
+    animation: pulseDot 1.8s infinite;
+  }
+
+  .metric-value {
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.2;
+    margin-bottom: 0.35rem;
+  }
+
+  .version-number {
+    font-size: 2.25rem;
+    letter-spacing: -0.02em;
+    color: var(--primary);
+  }
+
+  .date-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dark-subtle);
+  }
+
+  .platform-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dark-subtle);
+  }
+
+  .status-value {
+    font-size: 1.25rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .metric-caption {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  /* Manifest Footer */
+  .manifest-footer {
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .actions-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.6rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .btn-primary {
+    background-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 4px 14px 0 rgba(2, 132, 199, 0.35);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(2, 132, 199, 0.45);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background-color: var(--primary-light);
+  }
+
+  .credits {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-light);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  /* Animations */
+  @keyframes fadeInCard {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes pulseDot {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 640px) {
+    .manifest-card {
+      padding: 2.5rem 1.5rem;
+      border-radius: 20px;
+    }
+
+    .manifest-title {
+      font-size: 2.1rem;
+    }
+
+    .metrics-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .actions-group {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

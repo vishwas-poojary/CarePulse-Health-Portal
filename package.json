@@ -1,7 +1,7 @@
 {
   "name": "carepulse-website",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "bump-version": "node scripts/bump-version.ts",
     "lint:code": "eslint .",
     "lint:spell": "cspell \"**/*.{ts,astro,md,json}\" --no-progress",
     "lint": "eslint . && npm run lint:spell",
